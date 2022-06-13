@@ -10,15 +10,14 @@ MEMORY
 
 MPU_MIN_ALIGN = 1K;
 SECTIONS {
-    /*
-     * The flash header needs to match what the boot ROM for OpenTitan is
-     * expecting.  At the moment, it contains only the entry point, but it
-     * will eventually contain the signature -- and (hopefully?!) some
-     * versioning information to make it slightly easier to debug when the
-     * boot ROM and Tock are out of sync with respect to the definition...
-     */
-    .flash_header : {
-        LONG(_stext)
+    .manifest ORIGIN(rom):
+    {
+      . = . + 892;
+      LONG(_stext)
+    } > rom
+
+    .vectors : ALIGN (256) {
+      KEEP(*(.riscv.open_titan_trap_vectored));
     } > rom
 }
 

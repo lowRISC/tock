@@ -26,10 +26,10 @@ register_structs! {
         (0x28 => int_state_num: ReadWrite<u32>),
         (0x2C => int_state_val: ReadOnly<u32>),
         (0x30 => hw_exc_sts: ReadWrite<u32>),
-        (0x34 => err_code: ReadOnly<u32>),
-        (0x38 => err_code_test: ReadWrite<u32>),
-        (0x3C => sel_tracking_sm: WriteOnly<u32>),
-        (0x40 => tracking_sm_obs: ReadOnly<u32>),
+        (0x34 => recov_alert_sts: ReadWrite<u32>),
+        (0x38 => err_code: ReadOnly<u32>),
+        (0x3C => err_code_test: ReadWrite<u32>),
+        (0x40 => main_sm_state: ReadOnly<u32>),
         (0x44 => @END),
     }
 }
@@ -46,16 +46,16 @@ register_bitfields![u32,
     ],
     CTRL [
         ENABLE OFFSET(0) NUMBITS(4) [
-            ENABLE = 0xA,
-            DISABLE = 0x5,
+            ENABLE = 0x6,
+            DISABLE = 0x9,
         ],
         SW_APP_ENABLE OFFSET(4) NUMBITS(4) [
-            ENABLE = 0xA,
-            DISABLE = 0x5,
+            ENABLE = 0x6,
+            DISABLE = 0x9,
         ],
         READ_INT_STATE OFFSET(8) NUMBITS(4) [
-            ENABLE = 0xA,
-            DISABLE = 0x5,
+            ENABLE = 0x6,
+            DISABLE = 0x9,
         ],
     ],
     COMMAND [
@@ -67,7 +67,10 @@ register_bitfields![u32,
             UNINSTANTIATE = 5,
         ],
         CLEN OFFSET(4) NUMBITS(4) [],
-        FLAGS OFFSET(8) NUMBITS(4) [],
+        FLAGS OFFSET(8) NUMBITS(4) [
+            INSTANTIATE_SOURCE_XOR_SEED = 0,
+            INSTANTIATE_ZERO_ADDITIONAL_SEED = 1,
+        ],
         GLEN OFFSET(12) NUMBITS(19) [],
     ],
     GENBIT_VLD [
