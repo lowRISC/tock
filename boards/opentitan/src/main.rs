@@ -755,7 +755,7 @@ unsafe fn setup() -> (
         &mut mpu_config,
     );
 
-    chip.pmp.enable_kernel_mpu(&mut mpu_config);
+    //chip.pmp.enable_kernel_mpu(&mut mpu_config);
 
     kernel::process::load_processes(
         board_kernel,
