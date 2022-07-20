@@ -11,8 +11,8 @@
 //! that alarms whose expiration was in the past due to the
 //! latency of software work correctly.
 
+use crate::setup::ALARM;
 use crate::tests::run_kernel_op;
-use crate::ALARM;
 use capsules::test::random_alarm::TestRandomAlarm;
 use capsules::virtual_alarm::{MuxAlarm, VirtualMuxAlarm};
 use earlgrey::timer::RvTimer;

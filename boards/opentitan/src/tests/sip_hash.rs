@@ -1,5 +1,5 @@
+use crate::setup::SIPHASH;
 use crate::tests::run_kernel_op;
-use crate::SIPHASH;
 use core::cell::Cell;
 use kernel::hil::hasher::{self, Hasher};
 use kernel::static_init;

@@ -91,7 +91,7 @@ endif
 	mkdir -p $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/deps/
 	$(Q)cp test_layout.ld $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/deps/layout.ld
 	$(Q)cp ../../kernel_layout.ld $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/
-	$(Q)RUSTFLAGS="$(RUSTC_FLAGS_TOCK)" $(CARGO) test $(CARGO_FLAGS_TOCK_NO_BUILD_STD) $(NO_RUN) --bin $(PLATFORM) --release --features=hardware_tests
+	$(Q)RUSTFLAGS="$(RUSTC_FLAGS_TOCK)" $(CARGO) test $(CARGO_FLAGS_TOCK_NO_BUILD_STD) $(NO_RUN) --lib --release --features=hardware_tests
 	$(Q)rm $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/deps/layout.ld
 
 test-verilator:
