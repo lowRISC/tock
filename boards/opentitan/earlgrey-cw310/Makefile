@@ -40,23 +40,38 @@ qemu-app-gdb : $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 	$(QEMU) -s -S -M opentitan -kernel $^ -bios $(OPENTITAN_BOOT_ROM) -device loader,file=$(APP),addr=0x20030000 -nographic -serial mon:stdio
 
 flash: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
-	$(OPENTITAN_TREE)/util/fpga/cw310_loader.py --firmware $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
+	$(call check_defined, OPENTITAN_TREE)
+	$(OPENTITAN_TREE)/bazelisk.sh run //sw/host/opentitantool -- \
+        --rcfile= \
+		--interface=cw310 --conf=$(OPENTITAN_TREE)/sw/host/opentitantool/config/opentitan_cw310.json \
+		bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 
 flash-app: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
+	$(call check_defined, OPENTITAN_TREE)
 	$(RISC_PREFIX)-objcopy --update-section .apps=$(APP) $^ $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf
 	$(RISC_PREFIX)-objcopy --output-target=binary $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
-	$(OPENTITAN_TREE)/util/fpga/cw310_loader.py --firmware $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
+	$(OPENTITAN_TREE)/bazelisk.sh run //sw/host/opentitantool -- \
+        --rcfile= \
+		--interface=cw310 --conf=$(OPENTITAN_TREE)/sw/host/opentitantool/config/opentitan_cw310.json \
+		bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
 
 verilator: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 	$(call check_defined, OPENTITAN_TREE)
+	$(OPENTITAN_TREE)/bazelisk.sh build \
+		//hw:verilator \
+		//hw/ip/otp_ctrl/data:img_rma \
+		//sw/device/lib/testing/test_rom:test_rom
+	$(eval VERILATOR_DIR := $(shell $(OPENTITAN_TREE)/bazelisk.sh outquery //hw:verilator))
+	$(eval OTP_IMAGE := $(shell $(OPENTITAN_TREE)/bazelisk.sh outquery //hw/ip/otp_ctrl/data:img_rma))
+	$(eval TEST_ROM := $(shell $(OPENTITAN_TREE)/bazelisk.sh outquery //sw/device/lib/testing/test_rom:test_rom_sim_verilator_scr_vmem))
 	srec_cat $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin \
 		--binary --offset 0 --byte-swap 8 --fill 0xff \
 		-within $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin \
 		-binary -range-pad 8 --output binary.64.vmem --vmem 64
-	$(OPENTITAN_TREE)/build/lowrisc_dv_chip_verilator_sim_0.1/sim-verilator/Vchip_sim_tb \
-		--meminit=rom,$(OPENTITAN_TREE)/bazel-out/k8-fastbuild-ST-97f470ee3b14/bin/sw/device/lib/testing/test_rom/test_rom_sim_verilator.scr.39.vmem \
+	$(OPENTITAN_TREE)/$(VERILATOR_DIR)/sim-verilator/Vchip_sim_tb \
+		--meminit=rom,$(OPENTITAN_TREE)/$(TEST_ROM) \
 		--meminit=flash,./binary.64.vmem \
-		--meminit=otp,$(OPENTITAN_TREE)/bazel-out/k8-fastbuild/bin/sw/device/tests/otp_ctrl_smoketest_sim_verilator.runfiles/lowrisc_opentitan/hw/ip/otp_ctrl/data/img_rma.vmem
+		--meminit=otp,$(OPENTITAN_TREE)/$(OTP_IMAGE)
 
 test:
 ifneq ($(OPENTITAN_TREE),)
