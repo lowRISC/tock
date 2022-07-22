@@ -7,3 +7,10 @@ edition = "2021"
 [dependencies]
 rv32i = { path = "../../arch/rv32i" }
 kernel = { path = "../../kernel" }
+
+#[target.'cfg(test)'.dependencies.kernel]
+#path = "../../kernel"
+#features =["expectations"]
+
+[dev-dependencies]
+kernel = { path = "../../kernel", features=["expectations"]}
