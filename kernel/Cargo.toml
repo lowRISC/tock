@@ -26,6 +26,7 @@ tock-tbf = { path = "../libraries/tock-tbf" }
 # crate, as feature unification will ensure that a feature being set by a single
 # crate will lead to the feature being enabled for that dependency.
 [features]
+expectations = ["tock-registers/expectations"]
 trace_syscalls = []
 debug_load_processes = []
 no_debug_panics = []

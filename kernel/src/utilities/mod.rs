@@ -16,6 +16,8 @@ pub use self::static_ref::StaticRef;
 
 /// Re-export the tock-register-interface library.
 pub mod registers {
+    #[cfg(feature = "expectations")]
+    pub use tock_registers::expectations;
     pub use tock_registers::fields::{Field, FieldValue};
     pub use tock_registers::interfaces;
     pub use tock_registers::registers::InMemoryRegister;
