@@ -1,5 +1,64 @@
 //! Macros for cleanly defining peripheral registers.
 
+#[cfg(not(feature = "expectations"))]
+#[macro_export]
+macro_rules! instantiate_expectable {
+    ($name:ident, $($arg:tt)+) => {{
+        const _: () = {};
+    }};
+}
+#[cfg(not(feature = "expectations"))]
+#[macro_export]
+macro_rules! _assert {
+    ($cond:expr $(,)?) => {{ assert!($cond); }};
+    ($cond:expr, $($arg:tt)+) => {{ assert!($cond, $($arg)+); }};
+}
+
+#[cfg(feature = "expectations")]
+#[macro_export]
+macro_rules! instantiate_expectable {
+    (init, $name:ident, $($id:ident: $ty:ty),+) => {{
+        use $crate::expectations::{Sequencer, ExpectableInit};
+        use core::mem::MaybeUninit;
+        impl $name {
+            pub fn expectable() -> Self {
+                let sequencer = Sequencer::new();
+                let mut value = unsafe {
+                    // Initializing the register struct is tricky:
+                    // Padding or other reserved areas are usually implemented
+                    // as `u8` arrays of sizes that do not have `Default`.
+                    // Since the various register structs do not carry any
+                    // references (except a &`static str), we can initialize
+                    // everything to zero.  Then, for every field, we call
+                    // ExpectableInit::init() which fills in the sequencer and
+                    // name fields.
+                    MaybeUninit::<Self>::zeroed().assume_init()
+                };
+                $(
+                    value.$id.init(sequencer, stringify!($id));
+                )+
+                value
+            }
+        }
+    }};
+    ($name:ident, $($arg:tt)+) => {{
+        $crate::instantiate_expectable!(init, $name, $($arg)+);
+    }};
+}
+#[cfg(feature = "expectations")]
+#[macro_export]
+macro_rules! _assert {
+    // When building with expectations, the register structs are no longer
+    // sized identically to their target registers, so the built-in test
+    // assertions will fail.
+    ($cond:expr $(,)?) => {{
+        const _: () = {};
+    }};
+    ($cond:expr, $($arg:tt)+) => {{
+        const _: () = {};
+    }};
+}
+
 #[macro_export]
 macro_rules! register_fields {
     // Macro entry point.
@@ -32,6 +91,10 @@ macro_rules! register_fields {
                 $vis $id: $ty
             ),*
         }
+
+        const _:() = {
+            $crate::instantiate_expectable!($name, $($id: $ty),*);
+        };
     };
 
     // Munch field.
@@ -204,7 +267,7 @@ macro_rules! test_fields {
                 core::mem::size_of::<$struct $(<$life>)?>()
             }
 
-            assert!(
+            $crate::_assert!(
                 struct_size() == $size,
                 "{}",
                 concat!(
@@ -219,7 +282,7 @@ macro_rules! test_fields {
             // Internal sanity check. If we have reached this point and
             // correctly iterated over the struct's fields, the current offset
             // and the claimed end offset MUST be equal.
-            assert!(sum == $size);
+            $crate::_assert!(sum == $size);
         };
     };
 
@@ -248,7 +311,7 @@ macro_rules! test_fields {
                 // mostly relevant for when this is the first field in the
                 // struct, as any subsequent start offset error will be detected
                 // by an end offset error of the previous field.
-                assert!(
+                $crate::_assert!(
                     sum == $offset_start,
                     "{}",
                     concat!(
@@ -268,7 +331,7 @@ macro_rules! test_fields {
                 // expression, such that the allow attr can apply.
                 #[allow(clippy::bad_bit_mask)]
                 {
-                    assert!(
+                    $crate::_assert!(
                         sum & (align - 1) == 0,
                         "{}",
                         concat!(
@@ -283,7 +346,7 @@ macro_rules! test_fields {
                 // end offset of the field based on the next field's claimed
                 // start offset.
                 const new_sum: usize = sum + core::mem::size_of::<$ty>();
-                assert!(
+                $crate::_assert!(
                     new_sum == $offset_end,
                     "{}",
                     concat!(
@@ -326,7 +389,7 @@ macro_rules! test_fields {
                 // check is mostly relevant for when this is the first field in
                 // the struct, as any subsequent start offset error will be
                 // detected by an end offset error of the previous field.
-                assert!(
+                $crate::_assert!(
                     sum == $offset_start,
                     concat!(
                         "Invalid start offset for padding ",

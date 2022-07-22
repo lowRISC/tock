@@ -57,11 +57,14 @@
 // If we don't build any actual register types, we don't need unsafe
 // code in this crate
 #![cfg_attr(not(feature = "register_types"), forbid(unsafe_code))]
+#![cfg_attr(feature = "expectations", feature(thread_local))]
 
 pub mod fields;
 pub mod interfaces;
 pub mod macros;
 
+#[cfg(feature = "expectations")]
+pub mod expectations;
 #[cfg(feature = "register_types")]
 pub mod registers;
 
@@ -99,6 +102,8 @@ pub trait UIntLike:
     /// the largest representable value, use a bitwise negation: `~(<T
     /// as UIntLike>::zero())`.
     fn zero() -> Self;
+    fn as_u64(self) -> u64;
+    fn from_u64(v: u64) -> Self;
 }
 
 // Helper macro for implementing the UIntLike trait on differrent
@@ -108,6 +113,12 @@ macro_rules! UIntLike_impl_for {
         impl UIntLike for $type {
             fn zero() -> Self {
                 0
+            }
+            fn as_u64(self) -> u64 {
+                self as u64
+            }
+            fn from_u64(v: u64) -> Self {
+                v as $type
             }
         }
     };
