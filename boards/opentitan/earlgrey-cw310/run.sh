@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BUILD_DIR="verilator_build/"
+OTT="bazel-bin/sw/host/opentitantool/opentitantool"
 
 if [[ "${VERILATOR}" == "yes" ]]; then
 		if [ -d "$BUILD_DIR" ]; then
@@ -26,7 +27,7 @@ if [[ "${VERILATOR}" == "yes" ]]; then
 elif [[ "${OPENTITAN_TREE}" != "" ]]; then
 	riscv64-linux-gnu-objcopy --update-section .apps=${APP} ${1} bundle.elf
 	riscv64-linux-gnu-objcopy --output-target=binary bundle.elf binary
-	${OPENTITAN_TREE}/util/fpga/cw310_loader.py --firmware binary
+	${OPENTITAN_TREE}${OTT} bootstrap binary
 else
 	../../../tools/qemu/build/qemu-system-riscv32 -M opentitan -bios ../../../tools/qemu-runner/opentitan-boot-rom.elf -nographic -serial stdio -monitor none -semihosting -kernel "${1}"
 fi

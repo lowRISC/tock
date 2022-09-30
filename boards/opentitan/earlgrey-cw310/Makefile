@@ -6,7 +6,7 @@ PLATFORM=earlgrey-cw310
 FLASHID=--dev-id="0403:6010"
 RISC_PREFIX ?= riscv64-elf
 QEMU ?= ../../../tools/qemu/build/qemu-system-riscv32
-
+OTT=bazel-bin/sw/host/opentitantool/opentitantool
 
 include ../../Makefile.common
 
@@ -40,12 +40,12 @@ qemu-app-gdb : $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 	$(QEMU) -s -S -M opentitan -kernel $^ -bios $(OPENTITAN_BOOT_ROM) -device loader,file=$(APP),addr=0x20030000 -nographic -serial mon:stdio
 
 flash: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
-	$(OPENTITAN_TREE)/util/fpga/cw310_loader.py --firmware $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
+	$(OPENTITAN_TREE)$(OTT) bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 
 flash-app: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 	$(RISC_PREFIX)-objcopy --update-section .apps=$(APP) $^ $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf
 	$(RISC_PREFIX)-objcopy --output-target=binary $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
-	$(OPENTITAN_TREE)/util/fpga/cw310_loader.py --firmware $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
+	$(OPENTITAN_TREE)$(OTT) bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
 
 verilator: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 	$(call check_defined, OPENTITAN_TREE)
