@@ -42,8 +42,7 @@ qemu-app-gdb : $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 flash: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 	$(call check_defined, OPENTITAN_TREE)
 	$(OPENTITAN_TREE)/bazelisk.sh run //sw/host/opentitantool -- \
-        --rcfile= \
-		--interface=cw310 --conf=$(OPENTITAN_TREE)/sw/host/opentitantool/config/opentitan_cw310.json \
+		--rcfile= --interface=cw310 \
 		bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 
 flash-app: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
@@ -51,8 +50,7 @@ flash-app: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 	$(RISC_PREFIX)-objcopy --update-section .apps=$(APP) $^ $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf
 	$(RISC_PREFIX)-objcopy --output-target=binary $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
 	$(OPENTITAN_TREE)/bazelisk.sh run //sw/host/opentitantool -- \
-        --rcfile= \
-		--interface=cw310 --conf=$(OPENTITAN_TREE)/sw/host/opentitantool/config/opentitan_cw310.json \
+		--rcfile= --interface=cw310 \
 		bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.bin
 
 verilator: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin

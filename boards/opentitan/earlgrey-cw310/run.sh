@@ -41,8 +41,7 @@ elif [[ "${OPENTITAN_TREE}" != "" ]]; then
 	${OBJCOPY} --output-target=binary bundle.elf binary
 
 	${OPENTITAN_TREE}/bazelisk.sh run //sw/host/opentitantool -- \
-        --rcfile= \
-		--interface=cw310 --conf=${OPENTITAN_TREE}/sw/host/opentitantool/config/opentitan_cw310.json \
+        --rcfile= --interface=cw310 \
         bootstrap $(realpath binary)
 else
 	../../../tools/qemu/build/qemu-system-riscv32 -M opentitan -bios ../../../tools/qemu-runner/opentitan-boot-rom.elf -nographic -serial stdio -monitor none -semihosting -kernel "${1}"
