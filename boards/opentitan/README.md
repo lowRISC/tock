@@ -44,21 +44,6 @@ the Python dependencies are installed.
 python3 pip install -r python-requirements.txt
 ```
 
-Next connect to the board's serial with a second terminal:
-
-```shell
-screen /dev/ttyACM1 115200,cs8,-ixon,-ixoff
-```
-
-Then you need to flash the bitstream with:
-
-
-```shell
-./util/fpga/cw310_loader.py --bitstream lowrisc_systems_chip_earlgrey_cw310_0.1.bit --set-pll-defaults
-```
-
-After which you should see some output in the serial window.
-
 Then in the Tock board directoty export the `OPENTITAN_TREE` enviroment
 variable to point to the OpenTitan tree.
 
@@ -66,7 +51,44 @@ variable to point to the OpenTitan tree.
 export OPENTITAN_TREE=/home/opentitan/
 ```
 
-then you can run `make flash` or `make test-hardware` to use the board.
+Provide following configuration in a file "$XDG_CONFIG_HOME/opentitantool/config".
+(please replace <...> with you opentitan source directory path)
+
+```
+--interface=cw310
+--conf=<OPENTITAN_TREE>/sw/host/opentitanlib/src/app/config/opentitan_cw310.json
+```
+
+For user convenience, it is useful to add opentitan tool to PATH.
+
+```shell
+export PATH="$OPENTITAN_TREE/bazel-bin/sw/host/opentitantool:$PATH"
+```
+
+Download latest prebuild bitstream:
+
+```shell
+mkdir -p /tmp/bitstream-latest
+cd /tmp/bitstream-latest
+curl https://storage.googleapis.com/opentitan-bitstreams/master/bitstream-latest.tar.gz -o bitstream-latest.tar.gz
+tar -xvf bitstream-latest.tar.gz
+```
+
+Next connect to the board's serial with a second terminal.
+
+```shell
+screen /dev/ttyACM1 115200,cs8,-ixon,-ixoff
+```
+
+Then you need to flash the bitstream with command:
+
+```shell
+opentitantool fpga load-bitstream /tmp/bitstream-latest/lowrisc_systems_chip_earlgrey_cw310_0.1.bit
+opentitantool fpga set-pll
+```
+
+During execution of 'load-bitstream' command you should see some text on serial output.
+Then you can run `make flash` or `make test-hardware` to use the board.
 
 Verilator
 ---------
