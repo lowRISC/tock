@@ -3,12 +3,13 @@
 use core::ops::{Index, IndexMut};
 
 use kernel::utilities::StaticRef;
-use lowrisc::gpio::GpioRegisters;
-pub use lowrisc::gpio::{pins, GpioPin};
-use lowrisc::padctrl::PadCtrlRegisters;
+pub use lowrisc::gpio::GpioPin;
+pub use lowrisc::gpio::Pin;
+use lowrisc::registers::gpio_regs::GpioRegisters;
+use lowrisc::registers::pinmux_regs::PinmuxRegisters;
 
-pub const PADCTRL_BASE: StaticRef<PadCtrlRegisters> =
-    unsafe { StaticRef::new(0x4047_0000 as *const PadCtrlRegisters) };
+pub const PADCTRL_BASE: StaticRef<PinmuxRegisters> =
+    unsafe { StaticRef::new(0x4047_0000 as *const PinmuxRegisters) };
 
 pub const GPIO0_BASE: StaticRef<GpioRegisters> =
     unsafe { StaticRef::new(0x4004_0000 as *const GpioRegisters) };
@@ -21,38 +22,38 @@ impl<'a> Port<'a> {
     pub const fn new() -> Self {
         Self {
             pins: [
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin0),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin1),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin2),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin3),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin4),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin5),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin6),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin7),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin8),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin9),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin10),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin11),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin12),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin13),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin14),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin15),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin16),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin17),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin18),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin19),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin20),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin21),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin22),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin23),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin24),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin25),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin26),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin27),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin28),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin29),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin30),
-                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, pins::pin31),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin0),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin1),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin2),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin3),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin4),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin5),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin6),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin7),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin8),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin9),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin10),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin11),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin12),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin13),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin14),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin15),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin16),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin17),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin18),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin19),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin20),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin21),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin22),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin23),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin24),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin25),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin26),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin27),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin28),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin29),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin30),
+                GpioPin::new(GPIO0_BASE, PADCTRL_BASE, Pin::Pin31),
             ],
         }
     }
