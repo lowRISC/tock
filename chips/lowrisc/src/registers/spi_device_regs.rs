@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/spi_device/data/spi_device.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -174,6 +174,7 @@ register_bitfields![u32,
         TXF_EMPTY OFFSET(3) NUMBITS(1) [],
         ABORT_DONE OFFSET(4) NUMBITS(1) [],
         CSB OFFSET(5) NUMBITS(1) [],
+        TPM_CSB OFFSET(6) NUMBITS(1) [],
     ],
     pub(crate) RXF_PTR [
         RPTR OFFSET(0) NUMBITS(16) [],
@@ -197,7 +198,9 @@ register_bitfields![u32,
         SFDP OFFSET(2) NUMBITS(1) [],
         MBX OFFSET(3) NUMBITS(1) [],
     ],
-    pub(crate) LAST_READ_ADDR [],
+    pub(crate) LAST_READ_ADDR [
+        ADDR OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) FLASH_STATUS [
         BUSY OFFSET(0) NUMBITS(1) [],
         STATUS OFFSET(1) NUMBITS(23) [],
@@ -213,7 +216,9 @@ register_bitfields![u32,
     pub(crate) READ_THRESHOLD [
         THRESHOLD OFFSET(0) NUMBITS(10) [],
     ],
-    pub(crate) MAILBOX_ADDR [],
+    pub(crate) MAILBOX_ADDR [
+        ADDR OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) UPLOAD_STATUS [
         CMDFIFO_DEPTH OFFSET(0) NUMBITS(5) [],
         CMDFIFO_NOTEMPTY OFFSET(7) NUMBITS(1) [],
@@ -227,7 +232,9 @@ register_bitfields![u32,
     pub(crate) UPLOAD_CMDFIFO [
         DATA OFFSET(0) NUMBITS(8) [],
     ],
-    pub(crate) UPLOAD_ADDRFIFO [],
+    pub(crate) UPLOAD_ADDRFIFO [
+        DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) CMD_FILTER [
         FILTER_0 OFFSET(0) NUMBITS(1) [],
         FILTER_1 OFFSET(1) NUMBITS(1) [],
@@ -262,10 +269,18 @@ register_bitfields![u32,
         FILTER_30 OFFSET(30) NUMBITS(1) [],
         FILTER_31 OFFSET(31) NUMBITS(1) [],
     ],
-    pub(crate) ADDR_SWAP_MASK [],
-    pub(crate) ADDR_SWAP_DATA [],
-    pub(crate) PAYLOAD_SWAP_MASK [],
-    pub(crate) PAYLOAD_SWAP_DATA [],
+    pub(crate) ADDR_SWAP_MASK [
+        MASK OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) ADDR_SWAP_DATA [
+        DATA OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) PAYLOAD_SWAP_MASK [
+        MASK OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) PAYLOAD_SWAP_DATA [
+        DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) CMD_INFO [
         OPCODE_0 OFFSET(0) NUMBITS(8) [],
         ADDR_MODE_0 OFFSET(8) NUMBITS(2) [
@@ -307,7 +322,8 @@ register_bitfields![u32,
     pub(crate) TPM_CAP [
         REV OFFSET(0) NUMBITS(8) [],
         LOCALITY OFFSET(8) NUMBITS(1) [],
-        MAX_XFER_SIZE OFFSET(16) NUMBITS(3) [],
+        MAX_WR_SIZE OFFSET(16) NUMBITS(3) [],
+        MAX_RD_SIZE OFFSET(20) NUMBITS(3) [],
     ],
     pub(crate) TPM_CFG [
         EN OFFSET(0) NUMBITS(1) [],
@@ -319,8 +335,8 @@ register_bitfields![u32,
     pub(crate) TPM_STATUS [
         CMDADDR_NOTEMPTY OFFSET(0) NUMBITS(1) [],
         RDFIFO_NOTEMPTY OFFSET(1) NUMBITS(1) [],
-        RDFIFO_DEPTH OFFSET(4) NUMBITS(3) [],
-        WRFIFO_DEPTH OFFSET(8) NUMBITS(3) [],
+        RDFIFO_DEPTH OFFSET(8) NUMBITS(5) [],
+        WRFIFO_DEPTH OFFSET(16) NUMBITS(7) [],
     ],
     pub(crate) TPM_ACCESS [
         ACCESS_0 OFFSET(0) NUMBITS(8) [],
@@ -328,13 +344,21 @@ register_bitfields![u32,
         ACCESS_2 OFFSET(16) NUMBITS(8) [],
         ACCESS_3 OFFSET(24) NUMBITS(8) [],
     ],
-    pub(crate) TPM_STS [],
-    pub(crate) TPM_INTF_CAPABILITY [],
-    pub(crate) TPM_INT_ENABLE [],
+    pub(crate) TPM_STS [
+        STS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) TPM_INTF_CAPABILITY [
+        INTF_CAPABILITY OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) TPM_INT_ENABLE [
+        INT_ENABLE OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) TPM_INT_VECTOR [
         INT_VECTOR OFFSET(0) NUMBITS(8) [],
     ],
-    pub(crate) TPM_INT_STATUS [],
+    pub(crate) TPM_INT_STATUS [
+        INT_STATUS OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) TPM_DID_VID [
         VID OFFSET(0) NUMBITS(16) [],
         DID OFFSET(16) NUMBITS(16) [],
@@ -347,7 +371,7 @@ register_bitfields![u32,
         CMD OFFSET(24) NUMBITS(8) [],
     ],
     pub(crate) TPM_READ_FIFO [
-        VALUE OFFSET(0) NUMBITS(8) [],
+        VALUE OFFSET(0) NUMBITS(32) [],
     ],
     pub(crate) TPM_WRITE_FIFO [
         VALUE OFFSET(0) NUMBITS(8) [],

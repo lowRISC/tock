@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/hmac/data/hmac.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -80,12 +80,24 @@ register_bitfields![u32,
         FIFO_FULL OFFSET(1) NUMBITS(1) [],
         FIFO_DEPTH OFFSET(4) NUMBITS(5) [],
     ],
-    pub(crate) ERR_CODE [],
-    pub(crate) WIPE_SECRET [],
-    pub(crate) KEY [],
-    pub(crate) DIGEST [],
-    pub(crate) MSG_LENGTH_LOWER [],
-    pub(crate) MSG_LENGTH_UPPER [],
+    pub(crate) ERR_CODE [
+        ERR_CODE OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) WIPE_SECRET [
+        SECRET OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) KEY [
+        KEY_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DIGEST [
+        DIGEST_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MSG_LENGTH_LOWER [
+        V OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MSG_LENGTH_UPPER [
+        V OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for hmac

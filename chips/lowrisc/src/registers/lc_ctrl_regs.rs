@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/lc_ctrl/data/lc_ctrl.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -102,7 +102,9 @@ register_bitfields![u32,
     pub(crate) TRANSITION_CTRL [
         EXT_CLOCK_EN OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) TRANSITION_TOKEN [],
+    pub(crate) TRANSITION_TOKEN [
+        TRANSITION_TOKEN_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) TRANSITION_TARGET [
         STATE OFFSET(0) NUMBITS(30) [
             RAW = 0,
@@ -128,8 +130,12 @@ register_bitfields![u32,
             SCRAP = 692736660,
         ],
     ],
-    pub(crate) OTP_VENDOR_TEST_CTRL [],
-    pub(crate) OTP_VENDOR_TEST_STATUS [],
+    pub(crate) OTP_VENDOR_TEST_CTRL [
+        OTP_VENDOR_TEST_CTRL OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) OTP_VENDOR_TEST_STATUS [
+        OTP_VENDOR_TEST_STATUS OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) LC_STATE [
         STATE OFFSET(0) NUMBITS(30) [
             RAW = 0,
@@ -161,13 +167,23 @@ register_bitfields![u32,
     pub(crate) LC_TRANSITION_CNT [
         CNT OFFSET(0) NUMBITS(5) [],
     ],
-    pub(crate) LC_ID_STATE [],
+    pub(crate) LC_ID_STATE [
+        STATE OFFSET(0) NUMBITS(32) [
+            BLANK = 0,
+            PERSONALIZED = 286331153,
+            INVALID = 572662306,
+        ],
+    ],
     pub(crate) HW_REV [
         CHIP_REV OFFSET(0) NUMBITS(16) [],
         CHIP_GEN OFFSET(16) NUMBITS(16) [],
     ],
-    pub(crate) DEVICE_ID [],
-    pub(crate) MANUF_STATE [],
+    pub(crate) DEVICE_ID [
+        DEVICE_ID_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MANUF_STATE [
+        MANUF_STATE_0 OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for lc_ctrl

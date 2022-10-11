@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/rv_core_ibex/data/rv_core_ibex.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -86,8 +86,12 @@ register_bitfields![u32,
     pub(crate) IBUS_ADDR_EN [
         EN_0 OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) IBUS_ADDR_MATCHING [],
-    pub(crate) IBUS_REMAP_ADDR [],
+    pub(crate) IBUS_ADDR_MATCHING [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) IBUS_REMAP_ADDR [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) DBUS_REGWEN [
         EN_0 OFFSET(0) NUMBITS(1) [
             LOCKED = 0,
@@ -97,8 +101,12 @@ register_bitfields![u32,
     pub(crate) DBUS_ADDR_EN [
         EN_0 OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) DBUS_ADDR_MATCHING [],
-    pub(crate) DBUS_REMAP_ADDR [],
+    pub(crate) DBUS_ADDR_MATCHING [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DBUS_REMAP_ADDR [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) NMI_ENABLE [
         ALERT_EN OFFSET(0) NUMBITS(1) [],
         WDOG_EN OFFSET(1) NUMBITS(1) [],
@@ -113,12 +121,16 @@ register_bitfields![u32,
         FATAL_CORE_ERR OFFSET(9) NUMBITS(1) [],
         RECOV_CORE_ERR OFFSET(10) NUMBITS(1) [],
     ],
-    pub(crate) RND_DATA [],
+    pub(crate) RND_DATA [
+        DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) RND_STATUS [
         RND_DATA_VALID OFFSET(0) NUMBITS(1) [],
         RND_DATA_FIPS OFFSET(1) NUMBITS(1) [],
     ],
-    pub(crate) FPGA_INFO [],
+    pub(crate) FPGA_INFO [
+        VAL OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for RV_CORE_IBEX

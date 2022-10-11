@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/gpio/data/gpio.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -56,12 +56,49 @@ register_structs! {
 
 register_bitfields![u32,
     // Common Interrupt Offsets
-    pub(crate) INTR [],
+    pub(crate) INTR [
+        GPIO_0 OFFSET(0) NUMBITS(1) [],
+        GPIO_1 OFFSET(1) NUMBITS(1) [],
+        GPIO_2 OFFSET(2) NUMBITS(1) [],
+        GPIO_3 OFFSET(3) NUMBITS(1) [],
+        GPIO_4 OFFSET(4) NUMBITS(1) [],
+        GPIO_5 OFFSET(5) NUMBITS(1) [],
+        GPIO_6 OFFSET(6) NUMBITS(1) [],
+        GPIO_7 OFFSET(7) NUMBITS(1) [],
+        GPIO_8 OFFSET(8) NUMBITS(1) [],
+        GPIO_9 OFFSET(9) NUMBITS(1) [],
+        GPIO_10 OFFSET(10) NUMBITS(1) [],
+        GPIO_11 OFFSET(11) NUMBITS(1) [],
+        GPIO_12 OFFSET(12) NUMBITS(1) [],
+        GPIO_13 OFFSET(13) NUMBITS(1) [],
+        GPIO_14 OFFSET(14) NUMBITS(1) [],
+        GPIO_15 OFFSET(15) NUMBITS(1) [],
+        GPIO_16 OFFSET(16) NUMBITS(1) [],
+        GPIO_17 OFFSET(17) NUMBITS(1) [],
+        GPIO_18 OFFSET(18) NUMBITS(1) [],
+        GPIO_19 OFFSET(19) NUMBITS(1) [],
+        GPIO_20 OFFSET(20) NUMBITS(1) [],
+        GPIO_21 OFFSET(21) NUMBITS(1) [],
+        GPIO_22 OFFSET(22) NUMBITS(1) [],
+        GPIO_23 OFFSET(23) NUMBITS(1) [],
+        GPIO_24 OFFSET(24) NUMBITS(1) [],
+        GPIO_25 OFFSET(25) NUMBITS(1) [],
+        GPIO_26 OFFSET(26) NUMBITS(1) [],
+        GPIO_27 OFFSET(27) NUMBITS(1) [],
+        GPIO_28 OFFSET(28) NUMBITS(1) [],
+        GPIO_29 OFFSET(29) NUMBITS(1) [],
+        GPIO_30 OFFSET(30) NUMBITS(1) [],
+        GPIO_31 OFFSET(31) NUMBITS(1) [],
+    ],
     pub(crate) ALERT_TEST [
         FATAL_FAULT OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) DATA_IN [],
-    pub(crate) DIRECT_OUT [],
+    pub(crate) DATA_IN [
+        DATA_IN OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DIRECT_OUT [
+        DIRECT_OUT OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) MASKED_OUT_LOWER [
         DATA OFFSET(0) NUMBITS(16) [],
         MASK OFFSET(16) NUMBITS(16) [],
@@ -70,7 +107,40 @@ register_bitfields![u32,
         DATA OFFSET(0) NUMBITS(16) [],
         MASK OFFSET(16) NUMBITS(16) [],
     ],
-    pub(crate) DIRECT_OE [],
+    pub(crate) DIRECT_OE [
+        DIRECT_OE_0 OFFSET(0) NUMBITS(1) [],
+        DIRECT_OE_1 OFFSET(1) NUMBITS(1) [],
+        DIRECT_OE_2 OFFSET(2) NUMBITS(1) [],
+        DIRECT_OE_3 OFFSET(3) NUMBITS(1) [],
+        DIRECT_OE_4 OFFSET(4) NUMBITS(1) [],
+        DIRECT_OE_5 OFFSET(5) NUMBITS(1) [],
+        DIRECT_OE_6 OFFSET(6) NUMBITS(1) [],
+        DIRECT_OE_7 OFFSET(7) NUMBITS(1) [],
+        DIRECT_OE_8 OFFSET(8) NUMBITS(1) [],
+        DIRECT_OE_9 OFFSET(9) NUMBITS(1) [],
+        DIRECT_OE_10 OFFSET(10) NUMBITS(1) [],
+        DIRECT_OE_11 OFFSET(11) NUMBITS(1) [],
+        DIRECT_OE_12 OFFSET(12) NUMBITS(1) [],
+        DIRECT_OE_13 OFFSET(13) NUMBITS(1) [],
+        DIRECT_OE_14 OFFSET(14) NUMBITS(1) [],
+        DIRECT_OE_15 OFFSET(15) NUMBITS(1) [],
+        DIRECT_OE_16 OFFSET(16) NUMBITS(1) [],
+        DIRECT_OE_17 OFFSET(17) NUMBITS(1) [],
+        DIRECT_OE_18 OFFSET(18) NUMBITS(1) [],
+        DIRECT_OE_19 OFFSET(19) NUMBITS(1) [],
+        DIRECT_OE_20 OFFSET(20) NUMBITS(1) [],
+        DIRECT_OE_21 OFFSET(21) NUMBITS(1) [],
+        DIRECT_OE_22 OFFSET(22) NUMBITS(1) [],
+        DIRECT_OE_23 OFFSET(23) NUMBITS(1) [],
+        DIRECT_OE_24 OFFSET(24) NUMBITS(1) [],
+        DIRECT_OE_25 OFFSET(25) NUMBITS(1) [],
+        DIRECT_OE_26 OFFSET(26) NUMBITS(1) [],
+        DIRECT_OE_27 OFFSET(27) NUMBITS(1) [],
+        DIRECT_OE_28 OFFSET(28) NUMBITS(1) [],
+        DIRECT_OE_29 OFFSET(29) NUMBITS(1) [],
+        DIRECT_OE_30 OFFSET(30) NUMBITS(1) [],
+        DIRECT_OE_31 OFFSET(31) NUMBITS(1) [],
+    ],
     pub(crate) MASKED_OE_LOWER [
         DATA OFFSET(0) NUMBITS(16) [],
         MASK OFFSET(16) NUMBITS(16) [],
@@ -79,7 +149,9 @@ register_bitfields![u32,
         DATA OFFSET(0) NUMBITS(16) [],
         MASK OFFSET(16) NUMBITS(16) [],
     ],
-    pub(crate) CTRL_EN_INPUT_FILTER [],
+    pub(crate) CTRL_EN_INPUT_FILTER [
+        CTRL_EN_INPUT_FILTER OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for gpio

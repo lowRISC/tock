@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/otbn/data/otbn.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -43,8 +43,8 @@ register_structs! {
         // Memory area: Instruction Memory Access
         (0x4000 => pub(crate) imem: [ReadWrite<u32>; 1024]),
         // Memory area: Data Memory Access
-        (0x8000 => pub(crate) dmem: [ReadWrite<u32>; 512]),
-        (0x8800 => @END),
+        (0x8000 => pub(crate) dmem: [ReadWrite<u32>; 768]),
+        (0x8c00 => @END),
     }
 }
 
@@ -94,8 +94,12 @@ register_bitfields![u32,
         LIFECYCLE_ESCALATION OFFSET(6) NUMBITS(1) [],
         FATAL_SOFTWARE OFFSET(7) NUMBITS(1) [],
     ],
-    pub(crate) INSN_CNT [],
-    pub(crate) LOAD_CHECKSUM [],
+    pub(crate) INSN_CNT [
+        INSN_CNT OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) LOAD_CHECKSUM [
+        CHECKSUM OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for otbn

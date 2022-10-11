@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/aes/data/aes.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -55,11 +55,21 @@ register_bitfields![u32,
         RECOV_CTRL_UPDATE_ERR OFFSET(0) NUMBITS(1) [],
         FATAL_FAULT OFFSET(1) NUMBITS(1) [],
     ],
-    pub(crate) KEY_SHARE0 [],
-    pub(crate) KEY_SHARE1 [],
-    pub(crate) IV [],
-    pub(crate) DATA_IN [],
-    pub(crate) DATA_OUT [],
+    pub(crate) KEY_SHARE0 [
+        KEY_SHARE0_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) KEY_SHARE1 [
+        KEY_SHARE1_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) IV [
+        IV_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DATA_IN [
+        DATA_IN_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DATA_OUT [
+        DATA_OUT_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) CTRL_SHADOWED [
         OPERATION OFFSET(0) NUMBITS(2) [
             AES_ENC = 1,

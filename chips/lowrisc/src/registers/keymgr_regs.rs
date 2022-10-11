@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/keymgr/data/keymgr.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -100,20 +100,20 @@ register_bitfields![u32,
     ],
     pub(crate) START [
         EN OFFSET(0) NUMBITS(1) [
-            VALID STATE = 1,
+            VALID_STATE = 1,
         ],
     ],
     pub(crate) CONTROL_SHADOWED [
         OPERATION OFFSET(4) NUMBITS(3) [
             ADVANCE = 0,
-            GENERATE ID = 1,
-            GENERATE SW OUTPUT = 2,
-            GENERATE HW OUTPUT = 3,
+            GENERATE_ID = 1,
+            GENERATE_SW_OUTPUT = 2,
+            GENERATE_HW_OUTPUT = 3,
             DISABLE = 4,
         ],
         CDI_SEL OFFSET(7) NUMBITS(1) [
-            SEALING CDI = 0,
-            ATTESTATION CDI = 1,
+            SEALING_CDI = 0,
+            ATTESTATION_CDI = 1,
         ],
         DEST_SEL OFFSET(12) NUMBITS(2) [
             NONE = 0,
@@ -139,31 +139,49 @@ register_bitfields![u32,
     pub(crate) SW_BINDING_REGWEN [
         EN OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) SEALING_SW_BINDING [],
-    pub(crate) ATTEST_SW_BINDING [],
-    pub(crate) SALT [],
-    pub(crate) KEY_VERSI [],
+    pub(crate) SEALING_SW_BINDING [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) ATTEST_SW_BINDING [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) SALT [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) KEY_VERSI [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) MAX_CREATOR_KEY_VER_REGWEN [
         EN OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) MAX_CREATOR_KEY_VER_SHADOWED [],
+    pub(crate) MAX_CREATOR_KEY_VER_SHADOWED [
+        VAL OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) MAX_OWNER_INT_KEY_VER_REGWEN [
         EN OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) MAX_OWNER_INT_KEY_VER_SHADOWED [],
+    pub(crate) MAX_OWNER_INT_KEY_VER_SHADOWED [
+        VAL OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) MAX_OWNER_KEY_VER_REGWEN [
         EN OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) MAX_OWNER_KEY_VER_SHADOWED [],
-    pub(crate) SW_SHARE0_OUTPUT [],
-    pub(crate) SW_SHARE1_OUTPUT [],
+    pub(crate) MAX_OWNER_KEY_VER_SHADOWED [
+        VAL OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) SW_SHARE0_OUTPUT [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) SW_SHARE1_OUTPUT [
+        VAL_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) WORKING_STATE [
         STATE OFFSET(0) NUMBITS(3) [
             RESET = 0,
             INIT = 1,
-            CREATOR ROOT KEY = 2,
-            OWNER INTERMEDIATE KEY = 3,
-            OWNER KEY = 4,
+            CREATOR_ROOT_KEY = 2,
+            OWNER_INTERMEDIATE_KEY = 3,
+            OWNER_KEY = 4,
             DISABLED = 5,
             INVALID = 6,
         ],

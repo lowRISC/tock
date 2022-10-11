@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/entropy_src/data/entropy_src.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -176,7 +176,9 @@ register_bitfields![u32,
         ES_ROUTE OFFSET(0) NUMBITS(4) [],
         ES_TYPE OFFSET(4) NUMBITS(4) [],
     ],
-    pub(crate) ENTROPY_DATA [],
+    pub(crate) ENTROPY_DATA [
+        ENTROPY_DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) HEALTH_TEST_WINDOWS [
         FIPS_WINDOW OFFSET(0) NUMBITS(16) [],
         BYPASS_WINDOW OFFSET(16) NUMBITS(16) [],
@@ -253,15 +255,33 @@ register_bitfields![u32,
         FIPS_WATERMARK OFFSET(0) NUMBITS(16) [],
         BYPASS_WATERMARK OFFSET(16) NUMBITS(16) [],
     ],
-    pub(crate) REPCNT_TOTAL_FAILS [],
-    pub(crate) REPCNTS_TOTAL_FAILS [],
-    pub(crate) ADAPTP_HI_TOTAL_FAILS [],
-    pub(crate) ADAPTP_LO_TOTAL_FAILS [],
-    pub(crate) BUCKET_TOTAL_FAILS [],
-    pub(crate) MARKOV_HI_TOTAL_FAILS [],
-    pub(crate) MARKOV_LO_TOTAL_FAILS [],
-    pub(crate) EXTHT_HI_TOTAL_FAILS [],
-    pub(crate) EXTHT_LO_TOTAL_FAILS [],
+    pub(crate) REPCNT_TOTAL_FAILS [
+        REPCNT_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) REPCNTS_TOTAL_FAILS [
+        REPCNTS_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) ADAPTP_HI_TOTAL_FAILS [
+        ADAPTP_HI_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) ADAPTP_LO_TOTAL_FAILS [
+        ADAPTP_LO_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) BUCKET_TOTAL_FAILS [
+        BUCKET_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MARKOV_HI_TOTAL_FAILS [
+        MARKOV_HI_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MARKOV_LO_TOTAL_FAILS [
+        MARKOV_LO_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) EXTHT_HI_TOTAL_FAILS [
+        EXTHT_HI_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) EXTHT_LO_TOTAL_FAILS [
+        EXTHT_LO_TOTAL_FAILS OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) ALERT_THRESHOLD [
         ALERT_THRESHOLD OFFSET(0) NUMBITS(16) [],
         ALERT_THRESHOLD_INV OFFSET(16) NUMBITS(16) [],
@@ -295,8 +315,12 @@ register_bitfields![u32,
     pub(crate) FW_OV_RD_FIFO_OVERFLOW [
         FW_OV_RD_FIFO_OVERFLOW OFFSET(0) NUMBITS(1) [],
     ],
-    pub(crate) FW_OV_RD_DATA [],
-    pub(crate) FW_OV_WR_DATA [],
+    pub(crate) FW_OV_RD_DATA [
+        FW_OV_RD_DATA OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) FW_OV_WR_DATA [
+        FW_OV_WR_DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) OBSERVE_FIFO_THRESH [
         OBSERVE_FIFO_THRESH OFFSET(0) NUMBITS(7) [],
     ],
@@ -327,6 +351,8 @@ register_bitfields![u32,
         ES_MAIN_SM_ALERT OFFSET(12) NUMBITS(1) [],
         ES_BUS_CMP_ALERT OFFSET(13) NUMBITS(1) [],
         ES_THRESH_CFG_ALERT OFFSET(14) NUMBITS(1) [],
+        ES_FW_OV_WR_ALERT OFFSET(15) NUMBITS(1) [],
+        ES_FW_OV_DISABLE_ALERT OFFSET(16) NUMBITS(1) [],
     ],
     pub(crate) ERR_CODE [
         SFIFO_ESRNG_ERR OFFSET(0) NUMBITS(1) [],
@@ -335,6 +361,8 @@ register_bitfields![u32,
         ES_ACK_SM_ERR OFFSET(20) NUMBITS(1) [],
         ES_MAIN_SM_ERR OFFSET(21) NUMBITS(1) [],
         ES_CNTR_ERR OFFSET(22) NUMBITS(1) [],
+        SHA3_STATE_ERR OFFSET(23) NUMBITS(1) [],
+        SHA3_RST_STORAGE_ERR OFFSET(24) NUMBITS(1) [],
         FIFO_WRITE_ERR OFFSET(28) NUMBITS(1) [],
         FIFO_READ_ERR OFFSET(29) NUMBITS(1) [],
         FIFO_STATE_ERR OFFSET(30) NUMBITS(1) [],

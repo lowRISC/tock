@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/aon_timer/data/aon_timer.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -54,8 +54,12 @@ register_bitfields![u32,
         ENABLE OFFSET(0) NUMBITS(1) [],
         PRESCALER OFFSET(1) NUMBITS(12) [],
     ],
-    pub(crate) WKUP_THOLD [],
-    pub(crate) WKUP_COUNT [],
+    pub(crate) WKUP_THOLD [
+        THRESHOLD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) WKUP_COUNT [
+        COUNT OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) WDOG_REGWEN [
         REGWEN OFFSET(0) NUMBITS(1) [],
     ],
@@ -63,9 +67,15 @@ register_bitfields![u32,
         ENABLE OFFSET(0) NUMBITS(1) [],
         PAUSE_IN_SLEEP OFFSET(1) NUMBITS(1) [],
     ],
-    pub(crate) WDOG_BARK_THOLD [],
-    pub(crate) WDOG_BITE_THOLD [],
-    pub(crate) WDOG_COUNT [],
+    pub(crate) WDOG_BARK_THOLD [
+        THRESHOLD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) WDOG_BITE_THOLD [
+        THRESHOLD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) WDOG_COUNT [
+        COUNT OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) INTR_STATE [
         WKUP_TIMER_EXPIRED OFFSET(0) NUMBITS(1) [],
         WDOG_TIMER_BARK OFFSET(1) NUMBITS(1) [],

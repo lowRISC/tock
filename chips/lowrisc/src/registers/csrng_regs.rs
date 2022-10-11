@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/csrng/data/csrng.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -76,7 +76,9 @@ register_bitfields![u32,
         SW_APP_ENABLE OFFSET(4) NUMBITS(4) [],
         READ_INT_STATE OFFSET(8) NUMBITS(4) [],
     ],
-    pub(crate) CMD_REQ [],
+    pub(crate) CMD_REQ [
+        CMD_REQ OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) SW_CMD_STS [
         CMD_RDY OFFSET(0) NUMBITS(1) [],
         CMD_STS OFFSET(1) NUMBITS(1) [],
@@ -85,11 +87,15 @@ register_bitfields![u32,
         GENBITS_VLD OFFSET(0) NUMBITS(1) [],
         GENBITS_FIPS OFFSET(1) NUMBITS(1) [],
     ],
-    pub(crate) GENBITS [],
+    pub(crate) GENBITS [
+        GENBITS OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) INT_STATE_NUM [
         INT_STATE_NUM OFFSET(0) NUMBITS(4) [],
     ],
-    pub(crate) INT_STATE_VAL [],
+    pub(crate) INT_STATE_VAL [
+        INT_STATE_VAL OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) HW_EXC_STS [
         HW_EXC_STS OFFSET(0) NUMBITS(16) [],
     ],
@@ -97,7 +103,9 @@ register_bitfields![u32,
         ENABLE_FIELD_ALERT OFFSET(0) NUMBITS(1) [],
         SW_APP_ENABLE_FIELD_ALERT OFFSET(1) NUMBITS(1) [],
         READ_INT_STATE_FIELD_ALERT OFFSET(2) NUMBITS(1) [],
+        ACMD_FLAG0_FIELD_ALERT OFFSET(3) NUMBITS(1) [],
         CS_BUS_CMP_ALERT OFFSET(12) NUMBITS(1) [],
+        CS_MAIN_SM_ALERT OFFSET(13) NUMBITS(1) [],
     ],
     pub(crate) ERR_CODE [
         SFIFO_CMD_ERR OFFSET(0) NUMBITS(1) [],

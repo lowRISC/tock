@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/kmac/data/kmac.hjson
 use kernel::utilities::registers::ReadOnly;
@@ -111,11 +111,11 @@ register_bitfields![u32,
         EN_UNSUPPORTED_MODESTRENGTH OFFSET(26) NUMBITS(1) [],
     ],
     pub(crate) CMD [
-        CMD OFFSET(0) NUMBITS(4) [
-            START = 1,
-            PROCESS = 2,
-            RUN = 4,
-            DONE = 8,
+        CMD OFFSET(0) NUMBITS(6) [
+            START = 29,
+            PROCESS = 46,
+            RUN = 49,
+            DONE = 22,
         ],
         ENTROPY_REQ OFFSET(8) NUMBITS(1) [],
         HASH_CNT_CLR OFFSET(9) NUMBITS(1) [],
@@ -140,9 +140,15 @@ register_bitfields![u32,
     pub(crate) ENTROPY_REFRESH_THRESHOLD_SHADOWED [
         THRESHOLD OFFSET(0) NUMBITS(10) [],
     ],
-    pub(crate) ENTROPY_SEED [],
-    pub(crate) KEY_SHARE0 [],
-    pub(crate) KEY_SHARE1 [],
+    pub(crate) ENTROPY_SEED [
+        SEED_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) KEY_SHARE0 [
+        KEY_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) KEY_SHARE1 [
+        KEY_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) KEY_LEN [
         LEN OFFSET(0) NUMBITS(3) [
             KEY128 = 0,
@@ -152,8 +158,12 @@ register_bitfields![u32,
             KEY512 = 4,
         ],
     ],
-    pub(crate) PREFIX [],
-    pub(crate) ERR_CODE [],
+    pub(crate) PREFIX [
+        PREFIX_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) ERR_CODE [
+        ERR_CODE OFFSET(0) NUMBITS(32) [],
+    ],
 ];
 
 // End generated register constants for kmac

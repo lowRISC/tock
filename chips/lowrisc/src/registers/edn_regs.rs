@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/edn/data/edn.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -75,16 +75,28 @@ register_bitfields![u32,
         AUTO_REQ_MODE OFFSET(8) NUMBITS(4) [],
         CMD_FIFO_RST OFFSET(12) NUMBITS(4) [],
     ],
-    pub(crate) BOOT_INS_CMD [],
-    pub(crate) BOOT_GEN_CMD [],
-    pub(crate) SW_CMD_REQ [],
+    pub(crate) BOOT_INS_CMD [
+        BOOT_INS_CMD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) BOOT_GEN_CMD [
+        BOOT_GEN_CMD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) SW_CMD_REQ [
+        SW_CMD_REQ OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) SW_CMD_STS [
         CMD_RDY OFFSET(0) NUMBITS(1) [],
         CMD_STS OFFSET(1) NUMBITS(1) [],
     ],
-    pub(crate) RESEED_CMD [],
-    pub(crate) GENERATE_CMD [],
-    pub(crate) MAX_NUM_REQS_BETWEEN_RESEEDS [],
+    pub(crate) RESEED_CMD [
+        RESEED_CMD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) GENERATE_CMD [
+        GENERATE_CMD OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) MAX_NUM_REQS_BETWEEN_RESEEDS [
+        MAX_NUM_REQS_BETWEEN_RESEEDS OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) RECOV_ALERT_STS [
         EDN_ENABLE_FIELD_ALERT OFFSET(0) NUMBITS(1) [],
         BOOT_REQ_MODE_FIELD_ALERT OFFSET(1) NUMBITS(1) [],

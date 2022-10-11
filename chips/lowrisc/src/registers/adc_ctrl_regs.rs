@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/adc_ctrl/data/adc_ctrl.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -61,7 +61,7 @@ register_structs! {
 register_bitfields![u32,
     // Common Interrupt Offsets
     pub(crate) INTR [
-        DEBUG_CABLE OFFSET(0) NUMBITS(1) [],
+        MATCH_DONE OFFSET(0) NUMBITS(1) [],
     ],
     pub(crate) ALERT_TEST [
         FATAL_FAULT OFFSET(0) NUMBITS(1) [],
@@ -112,14 +112,7 @@ register_bitfields![u32,
         EN OFFSET(0) NUMBITS(9) [],
     ],
     pub(crate) ADC_INTR_STATUS [
-        CC_SINK_DET OFFSET(0) NUMBITS(1) [],
-        CC_1A5_SINK_DET OFFSET(1) NUMBITS(1) [],
-        CC_3A0_SINK_DET OFFSET(2) NUMBITS(1) [],
-        CC_SRC_DET OFFSET(3) NUMBITS(1) [],
-        CC_1A5_SRC_DET OFFSET(4) NUMBITS(1) [],
-        CC_SRC_DET_FLIP OFFSET(5) NUMBITS(1) [],
-        CC_1A5_SRC_DET_FLIP OFFSET(6) NUMBITS(1) [],
-        CC_DISCON OFFSET(7) NUMBITS(1) [],
+        FILTER_MATCH OFFSET(0) NUMBITS(8) [],
         ONESHOT OFFSET(8) NUMBITS(1) [],
     ],
 ];

@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/pattgen/data/pattgen.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -59,10 +59,18 @@ register_bitfields![u32,
         POLARITY_CH0 OFFSET(2) NUMBITS(1) [],
         POLARITY_CH1 OFFSET(3) NUMBITS(1) [],
     ],
-    pub(crate) PREDIV_CH0 [],
-    pub(crate) PREDIV_CH1 [],
-    pub(crate) DATA_CH0 [],
-    pub(crate) DATA_CH1 [],
+    pub(crate) PREDIV_CH0 [
+        CLK_RATIO OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) PREDIV_CH1 [
+        CLK_RATIO OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DATA_CH0 [
+        DATA_0 OFFSET(0) NUMBITS(32) [],
+    ],
+    pub(crate) DATA_CH1 [
+        DATA_0 OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) SIZE [
         LEN_CH0 OFFSET(0) NUMBITS(6) [],
         REPS_CH0 OFFSET(6) NUMBITS(10) [],

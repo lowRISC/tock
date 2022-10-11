@@ -45,6 +45,10 @@ flash: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 		--rcfile= --interface=cw310 \
 		bootstrap $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).bin
 
+update_registers:
+	$(OPENTITAN_TREE)/bazelisk.sh build //sw/device/tock:tock_lowrisc_registers
+	tar -C $(TOCK_ROOT_DIRECTORY) -xf $(OPENTITAN_TREE)/bazel-bin/sw/device/tock/tock_lowrisc_registers.tar
+
 flash-app: $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM).elf
 	$(call check_defined, OPENTITAN_TREE)
 	$(RISC_PREFIX)-objcopy --update-section .apps=$(APP) $^ $(TOCK_ROOT_DIRECTORY)target/$(TARGET)/release/$(PLATFORM)-app.elf

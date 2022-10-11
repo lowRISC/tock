@@ -1,12 +1,12 @@
-// Generated register constants for FLASH_CTRL.
+// Generated register constants for flash_ctrl.
 // This file is licensed under either of:
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-6422-g05dcfbd00
-// https://github.com/lowRISC/opentitan/tree/05dcfbd00ca893dba034b468d1754f3f50780080
+// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
+// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
 // Tree status: clean
-// Build date: 2022-07-20T21:02:26
+// Build date: 2022-10-25T11:35:38
 
 // Original reference file: hw/ip/flash_ctrl/data/flash_ctrl.hjson
 use kernel::utilities::registers::ReadOnly;
@@ -46,7 +46,7 @@ pub const FLASH_CTRL_PARAM_MAX_FIFO_DEPTH: u32 = 16;
 // Maximum depth for read / program fifos
 pub const FLASH_CTRL_PARAM_MAX_FIFO_WIDTH: u32 = 5;
 // Number of alerts
-pub const FLASH_CTRL_PARAM_NUM_ALERTS: u32 = 3;
+pub const FLASH_CTRL_PARAM_NUM_ALERTS: u32 = 5;
 // Register width
 pub const FLASH_CTRL_PARAM_REG_WIDTH: u32 = 32;
 
@@ -146,6 +146,69 @@ register_structs! {
         (0x01ac => pub(crate) prog_fifo: [WriteOnly<u32>; 1]),
         // Memory area: Flash read FIFO.
         (0x01b0 => pub(crate) rd_fifo: [ReadOnly<u32>; 1]),
+
+
+        (0x0000 => pub(crate) csr0_regwen: ReadWrite<u32, CSR0_REGWEN::Register>),
+
+
+        (0x0004 => pub(crate) csr1: ReadWrite<u32, CSR1::Register>),
+
+
+        (0x0008 => pub(crate) csr2: ReadWrite<u32, CSR2::Register>),
+
+
+        (0x000c => pub(crate) csr3: ReadWrite<u32, CSR3::Register>),
+
+
+        (0x0010 => pub(crate) csr4: ReadWrite<u32, CSR4::Register>),
+
+
+        (0x0014 => pub(crate) csr5: ReadWrite<u32, CSR5::Register>),
+
+
+        (0x0018 => pub(crate) csr6: ReadWrite<u32, CSR6::Register>),
+
+
+        (0x001c => pub(crate) csr7: ReadWrite<u32, CSR7::Register>),
+
+
+        (0x0020 => pub(crate) csr8: ReadWrite<u32, CSR8::Register>),
+
+
+        (0x0024 => pub(crate) csr9: ReadWrite<u32, CSR9::Register>),
+
+
+        (0x0028 => pub(crate) csr10: ReadWrite<u32, CSR10::Register>),
+
+
+        (0x002c => pub(crate) csr11: ReadWrite<u32, CSR11::Register>),
+
+
+        (0x0030 => pub(crate) csr12: ReadWrite<u32, CSR12::Register>),
+
+
+        (0x0034 => pub(crate) csr13: ReadWrite<u32, CSR13::Register>),
+
+
+        (0x0038 => pub(crate) csr14: ReadWrite<u32, CSR14::Register>),
+
+
+        (0x003c => pub(crate) csr15: ReadWrite<u32, CSR15::Register>),
+
+
+        (0x0040 => pub(crate) csr16: ReadWrite<u32, CSR16::Register>),
+
+
+        (0x0044 => pub(crate) csr17: ReadWrite<u32, CSR17::Register>),
+
+
+        (0x0048 => pub(crate) csr18: ReadWrite<u32, CSR18::Register>),
+
+
+        (0x004c => pub(crate) csr19: ReadWrite<u32, CSR19::Register>),
+
+
+        (0x0050 => pub(crate) csr20: ReadWrite<u32, CSR20::Register>),
         (0x01b4 => @END),
     }
 }
@@ -164,11 +227,15 @@ register_bitfields![u32,
         RECOV_ERR OFFSET(0) NUMBITS(1) [],
         FATAL_STD_ERR OFFSET(1) NUMBITS(1) [],
         FATAL_ERR OFFSET(2) NUMBITS(1) [],
+        FATAL_PRIM_FLASH_ALERT OFFSET(3) NUMBITS(1) [],
+        RECOV_PRIM_FLASH_ALERT OFFSET(4) NUMBITS(1) [],
     ],
     pub(crate) DIS [
         VAL OFFSET(0) NUMBITS(4) [],
     ],
-    pub(crate) EXEC [],
+    pub(crate) EXEC [
+        EN OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) INIT [
         VAL OFFSET(0) NUMBITS(1) [],
     ],
@@ -183,12 +250,12 @@ register_bitfields![u32,
             ERASE = 2,
         ],
         PROG_SEL OFFSET(6) NUMBITS(1) [
-            NORMAL PROGRAM = 0,
-            PROGRAM REPAIR = 1,
+            NORMAL_PROGRAM = 0,
+            PROGRAM_REPAIR = 1,
         ],
         ERASE_SEL OFFSET(7) NUMBITS(1) [
-            PAGE ERASE = 0,
-            BANK ERASE = 1,
+            PAGE_ERASE = 0,
+            BANK_ERASE = 1,
         ],
         PARTITION_SEL OFFSET(8) NUMBITS(1) [],
         INFO_SEL OFFSET(9) NUMBITS(2) [],
@@ -206,8 +273,8 @@ register_bitfields![u32,
     ],
     pub(crate) REGION_CFG_REGWEN [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            REGION LOCKED = 0,
-            REGION ENABLED = 1,
+            REGION_LOCKED = 0,
+            REGION_ENABLED = 1,
         ],
     ],
     pub(crate) MP_REGION_CFG [
@@ -233,8 +300,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK0_INFO0_REGWEN [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK0_INFO0_PAGE_CFG [
@@ -248,8 +315,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK0_INFO1_REGW [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK0_INFO1_PAGE_C [
@@ -263,8 +330,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK0_INFO2_REGWEN [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK0_INFO2_PAGE_CFG [
@@ -278,8 +345,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK1_INFO0_REGWEN [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK1_INFO0_PAGE_CFG [
@@ -293,8 +360,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK1_INFO1_REGW [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK1_INFO1_PAGE_C [
@@ -308,8 +375,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK1_INFO2_REGWEN [
         REGION_0 OFFSET(0) NUMBITS(1) [
-            PAGE LOCKED = 0,
-            PAGE ENABLED = 1,
+            PAGE_LOCKED = 0,
+            PAGE_ENABLED = 1,
         ],
     ],
     pub(crate) BANK1_INFO2_PAGE_CFG [
@@ -323,8 +390,8 @@ register_bitfields![u32,
     ],
     pub(crate) BANK_CFG_REGWEN [
         BANK OFFSET(0) NUMBITS(1) [
-            BANK LOCKED = 0,
-            BANK ENABLED = 1,
+            BANK_LOCKED = 0,
+            BANK_ENABLED = 1,
         ],
     ],
     pub(crate) MP_BANK_CFG_SHADOW [
@@ -352,8 +419,7 @@ register_bitfields![u32,
         PROG_ERR OFFSET(3) NUMBITS(1) [],
         PROG_WIN_ERR OFFSET(4) NUMBITS(1) [],
         PROG_TYPE_ERR OFFSET(5) NUMBITS(1) [],
-        FLASH_MACRO_ERR OFFSET(6) NUMBITS(1) [],
-        UPDATE_ERR OFFSET(7) NUMBITS(1) [],
+        UPDATE_ERR OFFSET(6) NUMBITS(1) [],
     ],
     pub(crate) STD_FAULT_STATUS [
         REG_INTG_ERR OFFSET(0) NUMBITS(1) [],
@@ -400,7 +466,9 @@ register_bitfields![u32,
         PROG_NORMAL_AVAIL OFFSET(1) NUMBITS(1) [],
         PROG_REPAIR_AVAIL OFFSET(2) NUMBITS(1) [],
     ],
-    pub(crate) SCRATCH [],
+    pub(crate) SCRATCH [
+        DATA OFFSET(0) NUMBITS(32) [],
+    ],
     pub(crate) FIFO_LVL [
         PROG OFFSET(0) NUMBITS(5) [],
         RD OFFSET(8) NUMBITS(5) [],
@@ -412,6 +480,170 @@ register_bitfields![u32,
         PROG OFFSET(0) NUMBITS(5) [],
         RD OFFSET(8) NUMBITS(5) [],
     ],
+    pub(crate) CSR0_REGWEN [
+        FIELD0 OFFSET(0) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR1 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(5) [
+        ],
+    ],
+    pub(crate) CSR2 [
+        FIELD0 OFFSET(0) NUMBITS(1) [
+        ],
+        FIELD1 OFFSET(1) NUMBITS(1) [
+        ],
+        FIELD2 OFFSET(2) NUMBITS(1) [
+        ],
+        FIELD3 OFFSET(3) NUMBITS(1) [
+        ],
+        FIELD4 OFFSET(4) NUMBITS(1) [
+        ],
+        FIELD5 OFFSET(5) NUMBITS(1) [
+        ],
+        FIELD6 OFFSET(6) NUMBITS(1) [
+        ],
+        FIELD7 OFFSET(7) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR3 [
+        FIELD0 OFFSET(0) NUMBITS(4) [
+        ],
+        FIELD1 OFFSET(4) NUMBITS(4) [
+        ],
+        FIELD2 OFFSET(8) NUMBITS(3) [
+        ],
+        FIELD3 OFFSET(11) NUMBITS(3) [
+        ],
+        FIELD4 OFFSET(14) NUMBITS(3) [
+        ],
+        FIELD5 OFFSET(17) NUMBITS(3) [
+        ],
+        FIELD6 OFFSET(20) NUMBITS(1) [
+        ],
+        FIELD7 OFFSET(21) NUMBITS(3) [
+        ],
+        FIELD8 OFFSET(24) NUMBITS(2) [
+        ],
+        FIELD9 OFFSET(26) NUMBITS(2) [
+        ],
+    ],
+    pub(crate) CSR4 [
+        FIELD0 OFFSET(0) NUMBITS(3) [
+        ],
+        FIELD1 OFFSET(3) NUMBITS(3) [
+        ],
+        FIELD2 OFFSET(6) NUMBITS(3) [
+        ],
+        FIELD3 OFFSET(9) NUMBITS(3) [
+        ],
+    ],
+    pub(crate) CSR5 [
+        FIELD0 OFFSET(0) NUMBITS(3) [
+        ],
+        FIELD1 OFFSET(3) NUMBITS(2) [
+        ],
+        FIELD2 OFFSET(5) NUMBITS(9) [
+        ],
+        FIELD3 OFFSET(14) NUMBITS(5) [
+        ],
+        FIELD4 OFFSET(19) NUMBITS(4) [
+        ],
+    ],
+    pub(crate) CSR6 [
+        FIELD0 OFFSET(0) NUMBITS(3) [
+        ],
+        FIELD1 OFFSET(3) NUMBITS(3) [
+        ],
+        FIELD2 OFFSET(6) NUMBITS(8) [
+        ],
+        FIELD3 OFFSET(14) NUMBITS(3) [
+        ],
+        FIELD4 OFFSET(17) NUMBITS(2) [
+        ],
+        FIELD5 OFFSET(19) NUMBITS(2) [
+        ],
+        FIELD6 OFFSET(21) NUMBITS(2) [
+        ],
+        FIELD7 OFFSET(23) NUMBITS(1) [
+        ],
+        FIELD8 OFFSET(24) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR7 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(9) [
+        ],
+    ],
+    pub(crate) CSR8 [
+        FIELD0 OFFSET(0) NUMBITS(32) [
+        ],
+    ],
+    pub(crate) CSR9 [
+        FIELD0 OFFSET(0) NUMBITS(32) [
+        ],
+    ],
+    pub(crate) CSR10 [
+        FIELD0 OFFSET(0) NUMBITS(32) [
+        ],
+    ],
+    pub(crate) CSR11 [
+        FIELD0 OFFSET(0) NUMBITS(32) [
+        ],
+    ],
+    pub(crate) CSR12 [
+        FIELD0 OFFSET(0) NUMBITS(10) [
+        ],
+    ],
+    pub(crate) CSR13 [
+        FIELD0 OFFSET(0) NUMBITS(20) [
+        ],
+        FIELD1 OFFSET(20) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR14 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR15 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR16 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR17 [
+        FIELD0 OFFSET(0) NUMBITS(8) [
+        ],
+        FIELD1 OFFSET(8) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR18 [
+        FIELD0 OFFSET(0) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR19 [
+        FIELD0 OFFSET(0) NUMBITS(1) [
+        ],
+    ],
+    pub(crate) CSR20 [
+        FIELD0 OFFSET(0) NUMBITS(1) [
+        ],
+        FIELD1 OFFSET(1) NUMBITS(1) [
+        ],
+        FIELD2 OFFSET(2) NUMBITS(1) [
+        ],
+    ],
 ];
 
-// End generated register constants for FLASH_CTRL
+// End generated register constants for flash_ctrl
