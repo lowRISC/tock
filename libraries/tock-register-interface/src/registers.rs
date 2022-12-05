@@ -22,6 +22,9 @@ use core::marker::PhantomData;
 use crate::interfaces::{Readable, Writeable};
 use crate::{RegisterLongName, UIntLike};
 
+#[cfg(feature = "expectations")]
+use crate::expectations::{Expectable, RegisterInner};
+
 /// Read/Write registers.
 ///
 /// For accessing and manipulating the register contents, the
@@ -30,18 +33,28 @@ use crate::{RegisterLongName, UIntLike};
 /// implemented.
 // To successfully alias this structure onto hardware registers in memory, this
 // struct must be exactly the size of the `T`.
-#[repr(transparent)]
+#[cfg_attr(not(feature = "expectations"), repr(transparent))]
 pub struct ReadWrite<T: UIntLike, R: RegisterLongName = ()> {
     value: UnsafeCell<T>,
+    #[cfg(feature = "expectations")]
+    inner: RegisterInner,
     associated_register: PhantomData<R>,
 }
+
 impl<T: UIntLike, R: RegisterLongName> Readable for ReadWrite<T, R> {
     type T = T;
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn get(&self) -> Self::T {
         unsafe { ::core::ptr::read_volatile(self.value.get()) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn get(&self) -> Self::T {
+        self.check_read()
     }
 }
 impl<T: UIntLike, R: RegisterLongName> Writeable for ReadWrite<T, R> {
@@ -49,8 +62,26 @@ impl<T: UIntLike, R: RegisterLongName> Writeable for ReadWrite<T, R> {
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn set(&self, value: T) {
         unsafe { ::core::ptr::write_volatile(self.value.get(), value) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn set(&self, value: T) {
+        self.check_write(value);
+    }
+}
+#[cfg(feature = "expectations")]
+impl<T: UIntLike, R: RegisterLongName> Expectable for ReadWrite<T, R> {
+    type T = T;
+    type R = R;
+    fn get_inner(&self) -> &RegisterInner {
+        &self.inner
+    }
+    fn get_inner_mut(&mut self) -> &mut RegisterInner {
+        &mut self.inner
     }
 }
 
@@ -60,18 +91,39 @@ impl<T: UIntLike, R: RegisterLongName> Writeable for ReadWrite<T, R> {
 /// implemented.
 // To successfully alias this structure onto hardware registers in memory, this
 // struct must be exactly the size of the `T`.
-#[repr(transparent)]
+#[cfg_attr(not(feature = "expectations"), repr(transparent))]
 pub struct ReadOnly<T: UIntLike, R: RegisterLongName = ()> {
     value: T,
+    #[cfg(feature = "expectations")]
+    inner: RegisterInner,
     associated_register: PhantomData<R>,
 }
+
 impl<T: UIntLike, R: RegisterLongName> Readable for ReadOnly<T, R> {
     type T = T;
     type R = R;
 
     #[inline]
-    fn get(&self) -> T {
+    #[cfg(not(feature = "expectations"))]
+    fn get(&self) -> Self::T {
         unsafe { ::core::ptr::read_volatile(&self.value) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn get(&self) -> Self::T {
+        self.check_read()
+    }
+}
+#[cfg(feature = "expectations")]
+impl<T: UIntLike, R: RegisterLongName> Expectable for ReadOnly<T, R> {
+    type T = T;
+    type R = R;
+    fn get_inner(&self) -> &RegisterInner {
+        &self.inner
+    }
+    fn get_inner_mut(&mut self) -> &mut RegisterInner {
+        &mut self.inner
     }
 }
 
@@ -81,18 +133,39 @@ impl<T: UIntLike, R: RegisterLongName> Readable for ReadOnly<T, R> {
 /// implemented.
 // To successfully alias this structure onto hardware registers in memory, this
 // struct must be exactly the size of the `T`.
-#[repr(transparent)]
+#[cfg_attr(not(feature = "expectations"), repr(transparent))]
 pub struct WriteOnly<T: UIntLike, R: RegisterLongName = ()> {
     value: UnsafeCell<T>,
+    #[cfg(feature = "expectations")]
+    inner: RegisterInner,
     associated_register: PhantomData<R>,
 }
+
 impl<T: UIntLike, R: RegisterLongName> Writeable for WriteOnly<T, R> {
     type T = T;
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn set(&self, value: T) {
         unsafe { ::core::ptr::write_volatile(self.value.get(), value) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn set(&self, value: T) {
+        self.check_write(value);
+    }
+}
+#[cfg(feature = "expectations")]
+impl<T: UIntLike, R: RegisterLongName> Expectable for WriteOnly<T, R> {
+    type T = T;
+    type R = R;
+    fn get_inner(&self) -> &RegisterInner {
+        &self.inner
+    }
+    fn get_inner_mut(&mut self) -> &mut RegisterInner {
+        &mut self.inner
     }
 }
 
@@ -111,18 +184,28 @@ impl<T: UIntLike, R: RegisterLongName> Writeable for WriteOnly<T, R> {
 /// [`ReadWrite`] register might be a better choice).
 // To successfully alias this structure onto hardware registers in memory, this
 // struct must be exactly the size of the `T`.
-#[repr(transparent)]
+#[cfg_attr(not(feature = "expectations"), repr(transparent))]
 pub struct Aliased<T: UIntLike, R: RegisterLongName = (), W: RegisterLongName = ()> {
     value: UnsafeCell<T>,
+    #[cfg(feature = "expectations")]
+    inner: RegisterInner,
     associated_register: PhantomData<(R, W)>,
 }
+
 impl<T: UIntLike, R: RegisterLongName, W: RegisterLongName> Readable for Aliased<T, R, W> {
     type T = T;
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn get(&self) -> Self::T {
         unsafe { ::core::ptr::read_volatile(self.value.get()) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn get(&self) -> Self::T {
+        self.check_read()
     }
 }
 impl<T: UIntLike, R: RegisterLongName, W: RegisterLongName> Writeable for Aliased<T, R, W> {
@@ -130,8 +213,26 @@ impl<T: UIntLike, R: RegisterLongName, W: RegisterLongName> Writeable for Aliase
     type R = W;
 
     #[inline]
-    fn set(&self, value: Self::T) {
+    #[cfg(not(feature = "expectations"))]
+    fn set(&self, value: T) {
         unsafe { ::core::ptr::write_volatile(self.value.get(), value) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn set(&self, value: T) {
+        self.check_write(value);
+    }
+}
+#[cfg(feature = "expectations")]
+impl<T: UIntLike, R: RegisterLongName, W: RegisterLongName> Expectable for Aliased<T, R, W> {
+    type T = T;
+    type R = W;
+    fn get_inner(&self) -> &RegisterInner {
+        &self.inner
+    }
+    fn get_inner_mut(&mut self) -> &mut RegisterInner {
+        &mut self.inner
     }
 }
 
@@ -147,9 +248,11 @@ impl<T: UIntLike, R: RegisterLongName, W: RegisterLongName> Writeable for Aliase
 /// implemented.
 // To successfully alias this structure onto hardware registers in memory, this
 // struct must be exactly the size of the `T`.
-#[repr(transparent)]
+#[cfg_attr(not(feature = "expectations"), repr(transparent))]
 pub struct InMemoryRegister<T: UIntLike, R: RegisterLongName = ()> {
     value: UnsafeCell<T>,
+    #[cfg(feature = "expectations")]
+    inner: RegisterInner,
     associated_register: PhantomData<R>,
 }
 
@@ -157,6 +260,11 @@ impl<T: UIntLike, R: RegisterLongName> InMemoryRegister<T, R> {
     pub const fn new(value: T) -> Self {
         InMemoryRegister {
             value: UnsafeCell::new(value),
+            #[cfg(feature = "expectations")]
+            inner: RegisterInner {
+                sequencer: usize::MAX,
+                name: "Unknown InMemoryRegister",
+            },
             associated_register: PhantomData,
         }
     }
@@ -166,8 +274,15 @@ impl<T: UIntLike, R: RegisterLongName> Readable for InMemoryRegister<T, R> {
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn get(&self) -> Self::T {
         unsafe { ::core::ptr::read_volatile(self.value.get()) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn get(&self) -> Self::T {
+        self.check_read()
     }
 }
 impl<T: UIntLike, R: RegisterLongName> Writeable for InMemoryRegister<T, R> {
@@ -175,7 +290,25 @@ impl<T: UIntLike, R: RegisterLongName> Writeable for InMemoryRegister<T, R> {
     type R = R;
 
     #[inline]
+    #[cfg(not(feature = "expectations"))]
     fn set(&self, value: T) {
         unsafe { ::core::ptr::write_volatile(self.value.get(), value) }
+    }
+
+    #[inline]
+    #[cfg(feature = "expectations")]
+    fn set(&self, value: T) {
+        self.check_write(value);
+    }
+}
+#[cfg(feature = "expectations")]
+impl<T: UIntLike, R: RegisterLongName> Expectable for InMemoryRegister<T, R> {
+    type T = T;
+    type R = R;
+    fn get_inner(&self) -> &RegisterInner {
+        &self.inner
+    }
+    fn get_inner_mut(&mut self) -> &mut RegisterInner {
+        &mut self.inner
     }
 }

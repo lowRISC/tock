@@ -254,3 +254,128 @@ impl<'a> hil::uart::Receive<'a> for Uart<'a> {
         Err(ErrorCode::FAIL)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    extern crate std;
+    use super::*;
+    use kernel::hil::uart::Transmit;
+    use kernel::static_init;
+    use kernel::utilities::registers::expectations::Expectable;
+
+    struct ResultBuffer {
+        buffer: TakeCell<'static, [u8]>,
+        len: Cell<usize>,
+        result: Cell<Result<(), ErrorCode>>,
+    }
+
+    impl Default for ResultBuffer {
+        fn default() -> Self {
+            Self {
+                buffer: TakeCell::empty(),
+                len: Cell::new(0),
+                result: Cell::new(Err(ErrorCode::FAIL)),
+            }
+        }
+    }
+
+    impl hil::uart::TransmitClient for ResultBuffer {
+        fn transmitted_buffer(
+            &self,
+            tx_buffer: &'static mut [u8],
+            tx_len: usize,
+            rval: Result<(), ErrorCode>,
+        ) {
+            self.buffer.replace(tx_buffer);
+            self.len.set(tx_len);
+            self.result.set(rval);
+        }
+    }
+
+    #[test]
+    pub fn test_set_baud_rate() {
+        let regs = UartRegisters::expectable();
+        let uart = Uart::new(StaticRef::for_test(&regs), 10_000_000);
+
+        // With a peripheral clock of 10MHz and a baud rate of 115200, we
+        // expect an NCO of 12079 (115200 * 1048576 / 10_000_000).
+        regs.ctrl.expect_write(CTRL::NCO.val(12079));
+        regs.ctrl.expect_modify(CTRL::TX::SET + CTRL::RX::SET);
+        regs.fifo_ctrl
+            .expect_write(FIFO_CTRL::RXRST::SET + FIFO_CTRL::TXRST::SET);
+
+        uart.set_baud_rate(115200);
+    }
+
+    #[test]
+    pub fn test_transmit_sync() {
+        let regs = UartRegisters::expectable();
+        let uart = Uart::new(StaticRef::for_test(&regs), 10_000_000);
+
+        let data = b"Hello";
+        // A synchronous transmit should always wait for the FIFO to indicate empty.
+        // Indicate full a couple of times to make sure the transmit function waits.
+        regs.status.expect_read(STATUS::TXFULL::SET);
+        regs.status.expect_read(STATUS::TXFULL::SET);
+        for byte in data {
+            regs.status.expect_read(STATUS::TXFULL::CLEAR);
+            regs.wdata.expect_write(WDATA::WDATA.val(*byte as u32));
+        }
+
+        uart.transmit_sync(data);
+    }
+
+    #[test]
+    pub fn test_transmit_intr() {
+        let regs = UartRegisters::expectable();
+        let uart = Uart::new(StaticRef::for_test(&regs), 10_000_000);
+
+        const PHRASE: &[u8; 45] = b"The quick brown fox jumped over the lazy dog!";
+
+        // The lowrisc uart FIFO is 32 bytes.
+        const FIFO_SIZE: usize = 32;
+
+        // First, tx_progress will enable the interrupt, then check the FIFO.
+        // We'll pretend the FIFO is already full and defer processing the buffer
+        // until the first interrupt.
+        regs.intr_enable.expect_modify(INTR::TX_EMPTY::SET);
+        regs.status.expect_read(STATUS::TXFULL::SET);
+
+        for chunk in PHRASE.chunks(FIFO_SIZE) {
+            // Each interrupt will disable the interrupt and clear the empty status.
+            regs.intr_state.expect_read(INTR::TX_EMPTY::SET);
+            regs.intr_enable.expect_modify(INTR::TX_EMPTY::CLEAR);
+            regs.intr_state.expect_write(INTR::TX_EMPTY::SET);
+
+            // Then it will call tx_progress, which will re-enable the interrupt
+            // and place each byte in the FIFO.
+            regs.intr_enable.expect_modify(INTR::TX_EMPTY::SET);
+            for byte in chunk {
+                regs.status.expect_read(STATUS::TXFULL::CLEAR);
+                regs.wdata.expect_write(WDATA::WDATA.val(*byte as u32));
+            }
+            // If we've filled the FIFO completely, status will read full.
+            if chunk.len() == FIFO_SIZE {
+                regs.status.expect_read(STATUS::TXFULL::SET);
+            }
+        }
+        // The final interrupt will disable the interrupt and detect that the full
+        // buffer has been transmitted and call the transmitted_buffer callback.
+        regs.intr_state.expect_read(INTR::TX_EMPTY::SET);
+        regs.intr_enable.expect_modify(INTR::TX_EMPTY::CLEAR);
+        regs.intr_state.expect_write(INTR::TX_EMPTY::SET);
+
+        let completion = ResultBuffer::default();
+        uart.set_transmit_client(&completion);
+        let data = unsafe { static_init!([u8; 45], *PHRASE) };
+        assert_eq!(Ok(()), uart.transmit_buffer(&mut data[..], PHRASE.len()));
+        // The hardware would issue three interrupts for this test scenario.
+        uart.handle_interrupt();
+        uart.handle_interrupt();
+        uart.handle_interrupt();
+
+        assert_eq!(PHRASE, completion.buffer.take().unwrap());
+        assert_eq!(PHRASE.len(), completion.len.get());
+        assert_eq!(Ok(()), completion.result.get());
+    }
+}

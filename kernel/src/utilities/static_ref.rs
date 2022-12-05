@@ -25,6 +25,9 @@ impl<T> StaticRef<T> {
     pub const unsafe fn new(ptr: *const T) -> StaticRef<T> {
         StaticRef { ptr: ptr }
     }
+    pub const fn for_test(r: &T) -> StaticRef<T> {
+        StaticRef { ptr: r as *const T }
+    }
 }
 
 impl<T> Clone for StaticRef<T> {
