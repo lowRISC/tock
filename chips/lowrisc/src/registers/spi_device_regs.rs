@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
-// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
+// Built for earlgrey_silver_release_v5-8869-g86fa2efb3
+// https://github.com/lowRISC/opentitan/tree/86fa2efb3c48b13f429129b7f17b04376b886c3a
 // Tree status: clean
-// Build date: 2022-10-25T11:35:38
+// Build date: 2022-12-07T12:53:24
 
 // Original reference file: hw/ip/spi_device/data/spi_device.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -334,8 +334,6 @@ register_bitfields![u32,
     ],
     pub(crate) TPM_STATUS [
         CMDADDR_NOTEMPTY OFFSET(0) NUMBITS(1) [],
-        RDFIFO_NOTEMPTY OFFSET(1) NUMBITS(1) [],
-        RDFIFO_DEPTH OFFSET(8) NUMBITS(5) [],
         WRFIFO_DEPTH OFFSET(16) NUMBITS(7) [],
     ],
     pub(crate) TPM_ACCESS [

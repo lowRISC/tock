@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
-// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
+// Built for earlgrey_silver_release_v5-8869-g86fa2efb3
+// https://github.com/lowRISC/opentitan/tree/86fa2efb3c48b13f429129b7f17b04376b886c3a
 // Tree status: clean
-// Build date: 2022-10-25T11:35:38
+// Build date: 2022-12-07T12:53:24
 
 // Original reference file: hw/ip/edn/data/edn.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -46,7 +46,7 @@ register_structs! {
         (0x0030 => pub(crate) max_num_reqs_between_reseeds: ReadWrite<u32, MAX_NUM_REQS_BETWEEN_RESEEDS::Register>),
         // Recoverable alert status register
         (0x0034 => pub(crate) recov_alert_sts: ReadWrite<u32, RECOV_ALERT_STS::Register>),
-        // Hardware detection of error conditions status register
+        // Hardware detection of fatal error conditions status register
         (0x0038 => pub(crate) err_code: ReadWrite<u32, ERR_CODE::Register>),
         // Test error conditions register
         (0x003c => pub(crate) err_code_test: ReadWrite<u32, ERR_CODE_TEST::Register>),
@@ -107,6 +107,7 @@ register_bitfields![u32,
     pub(crate) ERR_CODE [
         SFIFO_RESCMD_ERR OFFSET(0) NUMBITS(1) [],
         SFIFO_GENCMD_ERR OFFSET(1) NUMBITS(1) [],
+        SFIFO_OUTPUT_ERR OFFSET(2) NUMBITS(1) [],
         EDN_ACK_SM_ERR OFFSET(20) NUMBITS(1) [],
         EDN_MAIN_SM_ERR OFFSET(21) NUMBITS(1) [],
         EDN_CNTR_ERR OFFSET(22) NUMBITS(1) [],

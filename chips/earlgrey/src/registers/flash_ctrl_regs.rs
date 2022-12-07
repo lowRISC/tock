@@ -8,7 +8,7 @@
 // Tree status: clean
 // Build date: 2022-12-07T12:53:24
 
-// Original reference file: hw/ip/flash_ctrl/data/flash_ctrl.hjson
+// Original reference file: hw/top_earlgrey/ip/flash_ctrl/data/autogen/flash_ctrl.hjson
 use kernel::utilities::registers::ReadOnly;
 use kernel::utilities::registers::ReadWrite;
 use kernel::utilities::registers::WriteOnly;

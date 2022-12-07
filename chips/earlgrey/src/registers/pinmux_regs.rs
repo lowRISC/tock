@@ -8,17 +8,17 @@
 // Tree status: clean
 // Build date: 2022-12-07T12:53:24
 
-// Original reference file: hw/ip/pinmux/data/pinmux.hjson
+// Original reference file: hw/top_earlgrey/ip/pinmux/data/autogen/pinmux.hjson
 use kernel::utilities::registers::ReadWrite;
 use kernel::utilities::registers::{register_bitfields, register_structs};
 // Pad attribute data width
-pub const PINMUX_PARAM_ATTR_DW: u32 = 10;
+pub const PINMUX_PARAM_ATTR_DW: u32 = 13;
 // Number of muxed peripheral inputs
-pub const PINMUX_PARAM_N_MIO_PERIPH_IN: u32 = 33;
+pub const PINMUX_PARAM_N_MIO_PERIPH_IN: u32 = 57;
 // Number of muxed peripheral outputs
-pub const PINMUX_PARAM_N_MIO_PERIPH_OUT: u32 = 32;
+pub const PINMUX_PARAM_N_MIO_PERIPH_OUT: u32 = 75;
 // Number of muxed IO pads
-pub const PINMUX_PARAM_N_MIO_PADS: u32 = 32;
+pub const PINMUX_PARAM_N_MIO_PADS: u32 = 47;
 // Number of dedicated IO pads
 pub const PINMUX_PARAM_N_DIO_PADS: u32 = 16;
 // Number of wakeup detectors
@@ -35,50 +35,50 @@ register_structs! {
         // Alert Test Register
         (0x0000 => pub(crate) alert_test: ReadWrite<u32, ALERT_TEST::Register>),
         // Register write enable for MIO peripheral input selects.
-        (0x0004 => pub(crate) mio_periph_insel_regwen: [ReadWrite<u32, MIO_PERIPH_INSEL_REGWEN::Register>; 33]),
+        (0x0004 => pub(crate) mio_periph_insel_regwen: [ReadWrite<u32, MIO_PERIPH_INSEL_REGWEN::Register>; 57]),
         // For each peripheral input, this selects the muxable pad input.
-        (0x0088 => pub(crate) mio_periph_insel: [ReadWrite<u32, MIO_PERIPH_INSEL::Register>; 33]),
+        (0x00e8 => pub(crate) mio_periph_insel: [ReadWrite<u32, MIO_PERIPH_INSEL::Register>; 57]),
         // Register write enable for MIO output selects.
-        (0x010c => pub(crate) mio_outsel_regwen: [ReadWrite<u32, MIO_OUTSEL_REGWEN::Register>; 32]),
+        (0x01cc => pub(crate) mio_outsel_regwen: [ReadWrite<u32, MIO_OUTSEL_REGWEN::Register>; 47]),
         // For each muxable pad, this selects the peripheral output.
-        (0x018c => pub(crate) mio_outsel: [ReadWrite<u32, MIO_OUTSEL::Register>; 32]),
+        (0x0288 => pub(crate) mio_outsel: [ReadWrite<u32, MIO_OUTSEL::Register>; 47]),
         // Register write enable for MIO PAD attributes.
-        (0x020c => pub(crate) mio_pad_attr_regwen: [ReadWrite<u32, MIO_PAD_ATTR_REGWEN::Register>; 32]),
+        (0x0344 => pub(crate) mio_pad_attr_regwen: [ReadWrite<u32, MIO_PAD_ATTR_REGWEN::Register>; 47]),
         // Muxed pad attributes.
-        (0x028c => pub(crate) mio_pad_attr: [ReadWrite<u32, MIO_PAD_ATTR::Register>; 32]),
+        (0x0400 => pub(crate) mio_pad_attr: [ReadWrite<u32, MIO_PAD_ATTR::Register>; 47]),
         // Register write enable for DIO PAD attributes.
-        (0x030c => pub(crate) dio_pad_attr_regwen: [ReadWrite<u32, DIO_PAD_ATTR_REGWEN::Register>; 16]),
+        (0x04bc => pub(crate) dio_pad_attr_regwen: [ReadWrite<u32, DIO_PAD_ATTR_REGWEN::Register>; 16]),
         // Dedicated pad attributes.
-        (0x034c => pub(crate) dio_pad_attr: [ReadWrite<u32, DIO_PAD_ATTR::Register>; 16]),
+        (0x04fc => pub(crate) dio_pad_attr: [ReadWrite<u32, DIO_PAD_ATTR::Register>; 16]),
         // Register indicating whether the corresponding pad is in sleep mode.
-        (0x038c => pub(crate) mio_pad_sleep_stat: [ReadWrite<u32, MIO_PAD_SLEEP_STAT::Register>; 1]),
+        (0x053c => pub(crate) mio_pad_sleep_status: [ReadWrite<u32, MIO_PAD_SLEEP_STATUS::Register>; 2]),
         // Register write enable for MIO sleep value configuration.
-        (0x0390 => pub(crate) mio_pad_sleep_regwen: [ReadWrite<u32, MIO_PAD_SLEEP_REGWEN::Register>; 32]),
+        (0x0544 => pub(crate) mio_pad_sleep_regwen: [ReadWrite<u32, MIO_PAD_SLEEP_REGWEN::Register>; 47]),
         // Enables the sleep mode of the corresponding muxed pad.
-        (0x0410 => pub(crate) mio_pad_sleep_en: [ReadWrite<u32, MIO_PAD_SLEEP_EN::Register>; 32]),
+        (0x0600 => pub(crate) mio_pad_sleep_en: [ReadWrite<u32, MIO_PAD_SLEEP_EN::Register>; 47]),
         // Defines sleep behavior of the corresponding muxed pad.
-        (0x0490 => pub(crate) mio_pad_sleep_mode: [ReadWrite<u32, MIO_PAD_SLEEP_MODE::Register>; 32]),
+        (0x06bc => pub(crate) mio_pad_sleep_mode: [ReadWrite<u32, MIO_PAD_SLEEP_MODE::Register>; 47]),
         // Register indicating whether the corresponding pad is in sleep mode.
-        (0x0510 => pub(crate) dio_pad_sleep_stat: [ReadWrite<u32, DIO_PAD_SLEEP_STAT::Register>; 1]),
+        (0x0778 => pub(crate) dio_pad_sleep_stat: [ReadWrite<u32, DIO_PAD_SLEEP_STAT::Register>; 1]),
         // Register write enable for DIO sleep value configuration.
-        (0x0514 => pub(crate) dio_pad_sleep_regwen: [ReadWrite<u32, DIO_PAD_SLEEP_REGWEN::Register>; 16]),
+        (0x077c => pub(crate) dio_pad_sleep_regwen: [ReadWrite<u32, DIO_PAD_SLEEP_REGWEN::Register>; 16]),
         // Enables the sleep mode of the corresponding dedicated pad.
-        (0x0554 => pub(crate) dio_pad_sleep_en: [ReadWrite<u32, DIO_PAD_SLEEP_EN::Register>; 16]),
+        (0x07bc => pub(crate) dio_pad_sleep_en: [ReadWrite<u32, DIO_PAD_SLEEP_EN::Register>; 16]),
         // Defines sleep behavior of the corresponding dedicated pad.
-        (0x0594 => pub(crate) dio_pad_sleep_mode: [ReadWrite<u32, DIO_PAD_SLEEP_MODE::Register>; 16]),
+        (0x07fc => pub(crate) dio_pad_sleep_mode: [ReadWrite<u32, DIO_PAD_SLEEP_MODE::Register>; 16]),
         // Register write enable for wakeup detectors.
-        (0x05d4 => pub(crate) wkup_detector_regwen: [ReadWrite<u32, WKUP_DETECTOR_REGWEN::Register>; 8]),
+        (0x083c => pub(crate) wkup_detector_regwen: [ReadWrite<u32, WKUP_DETECTOR_REGWEN::Register>; 8]),
         // Enables for the wakeup detectors.
-        (0x05f4 => pub(crate) wkup_detector_en: [ReadWrite<u32, WKUP_DETECTOR_EN::Register>; 8]),
+        (0x085c => pub(crate) wkup_detector_en: [ReadWrite<u32, WKUP_DETECTOR_EN::Register>; 8]),
         // Configuration of wakeup condition detectors.
-        (0x0614 => pub(crate) wkup_detector: [ReadWrite<u32, WKUP_DETECTOR::Register>; 8]),
+        (0x087c => pub(crate) wkup_detector: [ReadWrite<u32, WKUP_DETECTOR::Register>; 8]),
         // Counter thresholds for wakeup condition detectors.
-        (0x0634 => pub(crate) wkup_detector_cnt_th: [ReadWrite<u32, WKUP_DETECTOR_CNT_TH::Register>; 8]),
+        (0x089c => pub(crate) wkup_detector_cnt_th: [ReadWrite<u32, WKUP_DETECTOR_CNT_TH::Register>; 8]),
         // Pad selects for pad wakeup condition detectors.
-        (0x0654 => pub(crate) wkup_detector_padsel: [ReadWrite<u32, WKUP_DETECTOR_PADSEL::Register>; 8]),
+        (0x08bc => pub(crate) wkup_detector_padsel: [ReadWrite<u32, WKUP_DETECTOR_PADSEL::Register>; 8]),
         // Cause registers for wakeup detectors.
-        (0x0674 => pub(crate) wkup_cau: [ReadWrite<u32, WKUP_CAU::Register>; 1]),
-        (0x0678 => @END),
+        (0x08dc => pub(crate) wkup_cau: [ReadWrite<u32, WKUP_CAU::Register>; 1]),
+        (0x08e0 => @END),
     }
 }
 
@@ -96,7 +96,7 @@ register_bitfields![u32,
         EN_0 OFFSET(0) NUMBITS(1) [],
     ],
     pub(crate) MIO_OUTSEL [
-        OUT_0 OFFSET(0) NUMBITS(6) [],
+        OUT_0 OFFSET(0) NUMBITS(7) [],
     ],
     pub(crate) MIO_PAD_ATTR_REGWEN [
         EN_0 OFFSET(0) NUMBITS(1) [],
@@ -132,7 +132,7 @@ register_bitfields![u32,
         SLEW_RATE_0 OFFSET(16) NUMBITS(2) [],
         DRIVE_STRENGTH_0 OFFSET(20) NUMBITS(4) [],
     ],
-    pub(crate) MIO_PAD_SLEEP_STAT [
+    pub(crate) MIO_PAD_SLEEP_STATUS [
         EN_0 OFFSET(0) NUMBITS(1) [],
         EN_1 OFFSET(1) NUMBITS(1) [],
         EN_2 OFFSET(2) NUMBITS(1) [],

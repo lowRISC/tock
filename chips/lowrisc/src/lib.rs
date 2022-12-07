@@ -9,6 +9,7 @@
 pub mod csrng;
 pub mod flash_ctrl;
 pub mod gpio;
+pub mod pinmux;
 pub mod hmac;
 pub mod i2c;
 pub mod otbn;

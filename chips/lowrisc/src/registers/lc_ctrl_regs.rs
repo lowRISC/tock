@@ -3,10 +3,10 @@
 //   Apache License, Version 2.0 (LICENSE-APACHE <http://www.apache.org/licenses/LICENSE-2.0>)
 //   MIT License (LICENSE-MIT <http://opensource.org/licenses/MIT>)
 
-// Built for earlgrey_silver_release_v5-8164-g7a7139c8a
-// https://github.com/lowRISC/opentitan/tree/7a7139c8af345f423ac27a0186febdda027f7127
+// Built for earlgrey_silver_release_v5-8869-g86fa2efb3
+// https://github.com/lowRISC/opentitan/tree/86fa2efb3c48b13f429129b7f17b04376b886c3a
 // Tree status: clean
-// Build date: 2022-10-25T11:35:38
+// Build date: 2022-12-07T12:53:24
 
 // Original reference file: hw/ip/lc_ctrl/data/lc_ctrl.hjson
 use kernel::utilities::registers::ReadWrite;
@@ -79,16 +79,17 @@ register_bitfields![u32,
         FATAL_BUS_INTEG_ERROR OFFSET(2) NUMBITS(1) [],
     ],
     pub(crate) STATUS [
-        READY OFFSET(0) NUMBITS(1) [],
-        TRANSITION_SUCCESSFUL OFFSET(1) NUMBITS(1) [],
-        TRANSITION_COUNT_ERROR OFFSET(2) NUMBITS(1) [],
-        TRANSITION_ERROR OFFSET(3) NUMBITS(1) [],
-        TOKEN_ERROR OFFSET(4) NUMBITS(1) [],
-        FLASH_RMA_ERROR OFFSET(5) NUMBITS(1) [],
-        OTP_ERROR OFFSET(6) NUMBITS(1) [],
-        STATE_ERROR OFFSET(7) NUMBITS(1) [],
-        BUS_INTEG_ERROR OFFSET(8) NUMBITS(1) [],
-        OTP_PARTITION_ERROR OFFSET(9) NUMBITS(1) [],
+        INITIALIZED OFFSET(0) NUMBITS(1) [],
+        READY OFFSET(1) NUMBITS(1) [],
+        TRANSITION_SUCCESSFUL OFFSET(2) NUMBITS(1) [],
+        TRANSITION_COUNT_ERROR OFFSET(3) NUMBITS(1) [],
+        TRANSITION_ERROR OFFSET(4) NUMBITS(1) [],
+        TOKEN_ERROR OFFSET(5) NUMBITS(1) [],
+        FLASH_RMA_ERROR OFFSET(6) NUMBITS(1) [],
+        OTP_ERROR OFFSET(7) NUMBITS(1) [],
+        STATE_ERROR OFFSET(8) NUMBITS(1) [],
+        BUS_INTEG_ERROR OFFSET(9) NUMBITS(1) [],
+        OTP_PARTITION_ERROR OFFSET(10) NUMBITS(1) [],
     ],
     pub(crate) CLAIM_TRANSITION_IF [
         MUTEX OFFSET(0) NUMBITS(8) [],
