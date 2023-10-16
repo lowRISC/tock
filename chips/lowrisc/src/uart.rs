@@ -53,9 +53,24 @@ impl<'a> Uart<'a> {
 
     fn set_baud_rate(&self, baud_rate: u32) -> Result<(), ErrorCode> {
         const NCO_BITS: u32 = u32::count_ones(CTRL::NCO.mask);
-        let regs = self.registers;
 
-        let uart_ctrl_nco = ((baud_rate as u64) << (NCO_BITS + 4)) / self.clock_frequency as u64;
+        let regs = self.registers;
+        let baud_adj = (baud_rate as u64) << (NCO_BITS + 4);
+        let freq_clk = self.clock_frequency as u64;
+        let uart_ctrl_nco = baud_adj / freq_clk;
+        let uart_ctrl_nco_rem = baud_adj % freq_clk;
+
+        // Calculate the NCO value, ensuring the error from integer division does not exceed 2.5%.
+        let uart_ctrl_nco = if 40 * uart_ctrl_nco_rem < freq_clk {
+            // Remainder is less than 2.5% of freq_clk, round down.
+            uart_ctrl_nco
+        } else if 40 * uart_ctrl_nco_rem > 39 * freq_clk {
+            // Remainder is greater than 97.5% of freq_clk, round up.
+            uart_ctrl_nco + 1
+        } else {
+            // Remainder is outside the acceptable range, requested baud rate is invalid.
+            return Err(ErrorCode::INVAL);
+        };
 
         regs.ctrl
             .write(CTRL::NCO.val((uart_ctrl_nco & 0xffff) as u32));
@@ -168,6 +183,34 @@ impl<'a> Uart<'a> {
 
                     client.received_buffer(rx_buf, len, return_code, uart::Error::None);
                 });
+            });
+        } else if intrs.is_set(INTR::TX_WATERMARK) {
+            // TODO: Additional logic or notification related to the watermark.
+        } else if intrs.is_set(INTR::RX_OVERFLOW) {
+            // Buffer has overflowed; notify the client or handle as needed.
+            self.rx_client.map(|client| {
+                client.error(uart::Error::OverrunError);
+            });
+        } else if intrs.is_set(INTR::RX_FRAME_ERR) {
+            // There was a framing error during reception.
+            self.rx_client.map(|client| {
+                client.error(uart::Error::FramingError);
+            });
+        } else if intrs.is_set(INTR::RX_BREAK_ERR) {
+            // A break condition was detected.
+            // TODO: Handle as required, perhaps reset or notify client.
+            self.rx_client.map(|client| {
+                client.error(uart::Error::BreakError);
+            });
+        } else if intrs.is_set(INTR::RX_TIMEOUT) {
+            // RX has timed out.
+            self.rx_client.map(|client| {
+                client.error(uart::Error::TimeoutError);
+            });
+        } else if intrs.is_set(INTR::RX_PARITY_ERR) {
+            // Parity error in the received data.
+            self.rx_client.map(|client| {
+                client.error(uart::Error::ParityError);
             });
         }
     }
